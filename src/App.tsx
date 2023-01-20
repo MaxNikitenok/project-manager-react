@@ -1,26 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import style from './App.module.css';
+import LeftPanel from './components/LeftPanel';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Start project-manager-react.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Ё
-        </a>
-      </header>
+    <div className={style.App}>
+      <LeftPanel />
+      <p>App in development</p>
     </div>
   );
-}
+};
 
 export default App;
