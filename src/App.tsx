@@ -1,12 +1,17 @@
 import React from 'react';
 import style from './App.module.css';
-import LeftPanel from './components/LeftPanel';
+import CentralPanel from './components/CentralPanel/CentralPanel';
+import Header from './components/Header/Header';
+import LeftPanel from './components/LeftPanel/LeftPanel';
+import RightPanel from './components/RightPanel/RightPanel';
 
 const App = () => {
   return (
     <div className={style.App}>
-      <LeftPanel />
-      <p>App in development</p>
+      <div className={style.header}><Header /></div>
+      <div className={style.leftPanel}><LeftPanel /></div>
+      <div className={style.centralPanel}><CentralPanel /></div>
+      <div className={style.rightPanel}><RightPanel /></div>
     </div>
   );
 };
