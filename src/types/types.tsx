@@ -1,3 +1,8 @@
-export type AppState = {
-  tasks: { _id: number; name: string; isDone: boolean }[];
+export type State = {
+  tasks: TasksState;
 };
+
+export type TasksState = {
+  tasks: { _id: number; name: string; isDone: boolean | null }[];
+};
+

@@ -1,3 +1,3 @@
-import { AppState } from '../types/types';
+import { State } from '../types/types';
 
-export const tasksSelector = (state: AppState) => state.tasks;
+export const tasksSelector = (state: State) => state.tasks.tasks;
