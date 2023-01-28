@@ -3,3 +3,58 @@
   background: linear-gradient(50deg, #111415, #5d6060);
   padding: 10px;
 }
+
+.LeftPanel li {
+  list-style: none;
+  margin-bottom: 2px;
+}
+
+.link {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #e7e3e3;
+  transition: 0.3s;
+}
+
+.link:hover {
+  color: #ffffff;
+  cursor: pointer;
+  background: #d4d4d40e;
+}
+
+.link:active {
+  background: #d4d4d43d;
+}
+
+.reactIcons {
+  vertical-align: middle;
+  color: aquamarine;
+}
+
+.linkActive {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #ffffff;
+  background: #d4d4d417;
+  transition: 0.3s;
+}
+
+.linkActive span {
+  padding: 0px 10px;
+}
+
+.link span {
+  padding: 0px 10px;
+}
