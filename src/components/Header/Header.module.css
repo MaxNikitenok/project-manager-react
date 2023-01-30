@@ -1,3 +1,58 @@
 .Header {
   height: 50px;
 }
+
+.Header li {
+  list-style: none;
+}
+
+.navList {
+  display: flex;
+  justify-content: end;
+}
+
+.link {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #2e2e2e;
+  transition: 0.3s;
+}
+
+.link:hover {
+  color: #000000;
+  cursor: pointer;
+  background: #d4d4d4d8;
+}
+
+.link:active {
+  background: #252525;
+  color: #fff;
+}
+
+.linkActive {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 20px;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #fff;
+  background: #252525cb;
+  transition: 0.3s;
+}
+
+.linkActive span {
+  padding: 0px 10px;
+}
+
+.link span {
+  padding: 0px 10px;
+}

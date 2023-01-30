@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { signUp } from '../services/api';
 import { TasksState } from '../types/types';
 
 const initialState: TasksState = {
@@ -23,9 +24,9 @@ const tasksSlice = createSlice({
     // },
   },
   extraReducers: (builder) => {
-    // builder.addCase(createBoard.pending, (state) => {
-    //   state.isLoading = true;
-    // });
+    builder.addCase(signUp.fulfilled, (state, payload) => {
+      console.log(payload);
+    });
     // builder.addCase(createBoard.fulfilled, (state, { payload }) => {
     //   state.userBoards.push(payload);
     //   state.isLoading = false;
