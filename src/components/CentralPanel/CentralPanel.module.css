@@ -1,6 +1,7 @@
 .CentralPanel {
   height: 100%;
   background: #b3b3b370;
+  padding: 5px;
 }
 
 .tasks {

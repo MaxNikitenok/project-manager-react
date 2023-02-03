@@ -1,8 +1,38 @@
-export type State = {
-  tasks: TasksState;
-};
+export interface User {
+  _id: string;
+  name: string;
+  login: string;
+}
 
-export type TasksState = {
-  tasks: { _id: number; name: string; isDone: boolean | null }[];
-};
+export type UsersResponse = User[];
 
+export interface Board {
+  _id: string;
+  title: string;
+  owner: string;
+  users: string[];
+}
+
+export type BoardsResponse = Board[];
+
+export interface Column {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+}
+
+export type ColumnsResponse = Column[];
+
+export interface Task {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  columnId: string;
+  description: string;
+  userId: number;
+  users: string[];
+}
+
+export type TasksResponse = Column[];
