@@ -7,7 +7,7 @@ export const appApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://backend-for-project-manager.up.railway.app/',
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZGFkNWI1MjE5YjNiNDAwOTVlY2Y3ZCIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjc1NDQ5MDYyLCJleHAiOjE2NzU0OTIyNjJ9.92Vt7owWI5ZgmpJtAVCTUUual6GvDP5WpWaQxuasAdc`,
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZGFkNWI1MjE5YjNiNDAwOTVlY2Y3ZCIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjc1NTA1NTQ0LCJleHAiOjE2NzU1NDg3NDR9.2E3sCV2pUAAUdMYl6Kv0mHwF2bjZTw-B2SD6fidoxg4`,
     },
   }),
   endpoints: (build) => ({

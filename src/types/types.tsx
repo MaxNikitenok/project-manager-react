@@ -1,3 +1,18 @@
+export type State = {
+  userState: UserState;
+  boardState: BoardState;
+}
+
+export interface UserState {
+  name: string | null;
+  login: string | null;
+  token: string | null;
+}
+
+export interface BoardState {
+
+}
+
 export interface User {
   _id: string;
   name: string;
