@@ -4,6 +4,8 @@ import { Route, Routes } from 'react-router-dom';
 import Boards from '../Boards/Boards';
 import Calendar from '../Calendar/Calendar';
 import Home from '../Home/Home';
+import SignUp from '../SignUp/SignUp';
+import SignIn from '../SignIn/SignIn';
 
 const CentralPanel = () => {
   
@@ -21,6 +23,8 @@ const CentralPanel = () => {
         <Route index path="/" element={<Home />} />
         <Route path="/boards" element={<Boards />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </div>

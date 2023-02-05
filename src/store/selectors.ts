@@ -1,4 +1,5 @@
 import { State } from "../types/types";
 
 
-export const userToken = (state: State) => state.user.token;
+export const isAuthorized = (state: State) => state.user.isAuthorized;
+export const isRegistrationSuccessfully = (state: State) => state.user.isRegistrationSuccessfully;

@@ -2,8 +2,13 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import style from './LeftPanel.module.css';
 import { RxHome, RxCalendar, RxDashboard } from 'react-icons/rx';
+import { isAuthorized } from '../../store/selectors';
+import { useSelector } from 'react-redux';
 
 const LeftPanel = () => {
+
+  const authorized = useSelector(isAuthorized);
+
   return (
     <div className={style.LeftPanel}>
       <nav>
@@ -14,12 +19,12 @@ const LeftPanel = () => {
               <span>Home</span>
             </NavLink>
           </li>
-          <li>
+          {authorized && <li>
             <NavLink to="/boards" className={({ isActive }) => isActive ? style.linkActive : style.link}>
               <RxDashboard />
               <span>Boards</span>
             </NavLink>
-          </li>
+          </li>}
           <li>
             <NavLink to="/calendar" className={({ isActive }) => isActive ? style.linkActive : style.link}>
               <RxCalendar />

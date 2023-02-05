@@ -6,7 +6,8 @@ export type State = {
 export interface UserState {
   name: string | null;
   login: string | null;
-  token: string | null;
+  isAuthorized: boolean;
+  isRegistrationSuccessfully: boolean;
 }
 
 export interface BoardState {

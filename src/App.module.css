@@ -1,11 +1,13 @@
 .App {
   display: grid;
   grid-template-columns: 270px 1fr 100px;
+  grid-template-rows: 1fr 13fr;
   grid-template-areas:
     'leftPanel    header       header'
     'leftPanel centralPanel rightPanel';
   gap: 10px;
   background: linear-gradient(50deg, #b3b7bb, 40%, #f2f5f6);
+  height: 100vh;
 }
 
 .header {
@@ -14,16 +16,13 @@
 
 .leftPanel {
   grid-area: leftPanel;
-  height: calc(100vh - 20px);
   color: #fff;
 }
 
 .centralPanel {
   grid-area: centralPanel;
-  height: calc(100vh - 60px);
 }
 
 .rightPanel {
   grid-area: rightPanel;
-  height: calc(100vh - 60px);
 }

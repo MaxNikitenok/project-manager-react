@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import {  State, BoardsResponse, UsersResponse } from '../types/types';
+import { BoardsResponse, UsersResponse } from '../types/types';
 
 export const appApi = createApi({
   reducerPath: 'taskApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://backend-for-project-manager.up.railway.app/',
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as State).user.token;
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
 
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
