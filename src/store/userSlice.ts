@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { appApi } from '../services/taskApi';
 
 const initialState = {
-  name: 'Max',
-  login: 'Max',
+  name: null,
+  login: null,
   token: null,
 } as UserState;
 

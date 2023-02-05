@@ -1,6 +1,6 @@
 export type State = {
-  userState: UserState;
-  boardState: BoardState;
+  user: UserState;
+  board: BoardState;
 }
 
 export interface UserState {

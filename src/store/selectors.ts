@@ -1,4 +1,4 @@
 import { State } from "../types/types";
 
 
-export const userToken = (state: State) => state.userState.token;
+export const userToken = (state: State) => state.user.token;
