@@ -5,38 +5,47 @@ import { appApi } from '../services/taskApi';
 const initialState = {
   name: null,
   login: null,
-  isAuthorized: !!(localStorage.getItem('token')),
+  isAuthorized: !!localStorage.getItem('token'),
   isRegistrationSuccessfully: false,
 } as UserState;
 
 const userSlice = createSlice({
-	name: 'user',
-	initialState,
-	reducers: {
-		resetUser: (state) => {
-			state.name = null;
-			state.login = null;
+  name: 'user',
+  initialState,
+  reducers: {
+    resetUser: (state) => {
+      state.name = null;
+      state.login = null;
       localStorage.removeItem('token');
-      state.isAuthorized = !!(localStorage.getItem('token'));
-		},
-	},
+      state.isAuthorized = !!localStorage.getItem('token');
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       appApi.endpoints.signUp.matchFulfilled,
-      (state, {payload}) => {
-        state.name = payload.name
-        state.login = payload.login
+      (state, { payload }) => {
+        state.name = payload.name;
+        state.login = payload.login;
         state.isRegistrationSuccessfully = true;
       }
     );
     builder.addMatcher(
       appApi.endpoints.signIn.matchFulfilled,
-      (state, {payload}) => {
-        localStorage.setItem('token', payload.token)
+      (state, { payload }) => {
+        localStorage.setItem('token', payload.token);
         state.isAuthorized = true;
       }
     );
-  }
+    builder.addMatcher(
+      appApi.endpoints.getBoards.matchRejected,
+      (state, { payload }) => {
+        if (payload?.status === 403) {
+          alert('token is dead')
+          localStorage.removeItem('token');
+        }
+      }
+    );
+  },
 });
 
 export default userSlice.reducer;

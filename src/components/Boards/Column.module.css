@@ -1,0 +1,12 @@
+.container {
+  margin: 8px;
+  border: 1px solid darkgray;
+}
+
+.title {
+  padding: 8px;
+}
+
+.taskList{
+  padding: 8px;
+}
