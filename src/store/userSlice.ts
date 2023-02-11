@@ -1,6 +1,6 @@
 import { UserState } from './../types/types';
 import { createSlice } from '@reduxjs/toolkit';
-import { appApi } from '../services/taskApi';
+import { userApi } from '../services/userApi';
 
 const initialState = {
   name: null,
@@ -22,7 +22,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      appApi.endpoints.signUp.matchFulfilled,
+      userApi.endpoints.signUp.matchFulfilled,
       (state, { payload }) => {
         state.name = payload.name;
         state.login = payload.login;
@@ -30,19 +30,10 @@ const userSlice = createSlice({
       }
     );
     builder.addMatcher(
-      appApi.endpoints.signIn.matchFulfilled,
+      userApi.endpoints.signIn.matchFulfilled,
       (state, { payload }) => {
         localStorage.setItem('token', payload.token);
         state.isAuthorized = true;
-      }
-    );
-    builder.addMatcher(
-      appApi.endpoints.getBoards.matchRejected,
-      (state, { payload }) => {
-        if (payload?.status === 403) {
-          alert('token is dead')
-          localStorage.removeItem('token');
-        }
       }
     );
   },

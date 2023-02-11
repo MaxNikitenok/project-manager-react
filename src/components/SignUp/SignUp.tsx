@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import style from './SignUp.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useSignUpMutation } from '../../services/taskApi';
+import { useSignUpMutation } from '../../services/userApi';
 import { useSelector } from 'react-redux';
 import { isRegistrationSuccessfully } from '../../store/selectors';
 

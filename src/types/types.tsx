@@ -1,6 +1,6 @@
 export type State = {
   user: UserState;
-  board: BoardState;
+  boards: BoardsState;
 }
 
 export interface UserState {
@@ -10,37 +10,40 @@ export interface UserState {
   isRegistrationSuccessfully: boolean;
 }
 
-export interface BoardState {
+export interface BoardsState {
+  boards: IBoard[];
+  columns: IColumn[];
+  tasks: ITask[];
 
 }
 
-export interface User {
+export interface IUser {
   _id: string;
   name: string;
   login: string;
 }
 
-export type UsersResponse = User[];
+export type UsersResponse = IUser[];
 
-export interface Board {
+export interface IBoard {
   _id: string;
   title: string;
   owner: string;
   users: string[];
 }
 
-export type BoardsResponse = Board[];
+export type BoardsResponse = IBoard[];
 
-export interface Column {
+export interface IColumn {
   _id: string;
   title: string;
   order: number;
   boardId: string;
 }
 
-export type ColumnsResponse = Column[];
+export type ColumnsResponse = IColumn[];
 
-export interface Task {
+export interface ITask {
   _id: string;
   title: string;
   order: number;
@@ -51,4 +54,4 @@ export interface Task {
   users: string[];
 }
 
-export type TasksResponse = Column[];
+export type TasksResponse = ITask[];

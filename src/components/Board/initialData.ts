@@ -1,6 +1,6 @@
 import React from 'react';
 
-const initialData = {
+export const initialData = {
   tasks: {
     'task-1': {id: 'task-1', content: 'task-1 content'},
     'task-2': {id: 'task-2', content: 'task-2 content'},
@@ -26,5 +26,3 @@ const initialData = {
   },
   columnOrder: ['column-1', 'column-2', 'column-3'],
 };
-
-export default initialData;

@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BoardsResponse, UsersResponse } from '../types/types';
+import { UsersResponse } from '../types/types';
 
-export const appApi = createApi({
-  reducerPath: 'taskApi',
+export const userApi = createApi({
+  reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://backend-for-project-manager.up.railway.app/',
     prepareHeaders: (headers) => {
@@ -33,9 +33,6 @@ export const appApi = createApi({
     getUsers: build.query<UsersResponse, void>({
       query: () => 'users/',
     }),
-    getBoards: build.query<BoardsResponse, void>({
-      query: () => 'boards/',
-    }),
     updateUser: build.mutation({
       query: ({ id, body }) => ({
         url: `users/${id}`,
@@ -52,11 +49,10 @@ export const appApi = createApi({
 export const {
   useSignUpMutation,
   useSignInMutation,
-  useGetBoardsQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
   useDeleteUserQuery,
-} = appApi;
+} = userApi;
 
 // const columnsUrl = '/columns/';
 // const columnsSetUrl = 'columnsSet/';

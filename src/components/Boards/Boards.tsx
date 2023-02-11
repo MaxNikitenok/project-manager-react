@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useGetBoardsQuery } from '../../services/taskApi';
+import React from 'react';
+import { useGetAllBoardsQuery } from '../../services/boardsApi';
 import { Board } from '../Board/Board';
 import style from './Boards.module.css';
 
 const Boards = () => {
-  const { data = [] } = useGetBoardsQuery();
+  const { data = [] } = useGetAllBoardsQuery();
 
   return (
     <div className={style.boards}>

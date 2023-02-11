@@ -1,11 +1,15 @@
+import { boardsApi } from './../services/boardsApi';
 import { configureStore } from '@reduxjs/toolkit';
-import { appApi } from '../services/taskApi';
+import { userApi } from '../services/userApi';
 import userReducer from './userSlice';
+import boardsReducer from './boardsSlice';
 
 export const store = configureStore({
   reducer: {
-    [appApi.reducerPath]: appApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
+    [boardsApi.reducerPath]: boardsApi.reducer,
     user: userReducer,
+    boards: boardsReducer,
   },
-  middleware: (getDefaultMiddlware) => getDefaultMiddlware().concat(appApi.middleware),
+  middleware: (getDefaultMiddlware) => getDefaultMiddlware().concat(userApi.middleware).concat(boardsApi.middleware),
 });
