@@ -43,7 +43,7 @@ export const boardsApi = createApi({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
     updateColumnsSet: build.mutation({
-      query: (body) => ({
+      query: (body: { _id: string; order: number }[]) => ({
         url: `columnsSet`,
         method: 'PATCH',
         body,
@@ -57,7 +57,6 @@ export const {
   useGetColumnsFromBoardQuery,
   useGetTasksFromBoardQuery,
   useUpdateColumnsSetMutation,
-
 } = boardsApi;
 
 // const columnsUrl = '/columns/';

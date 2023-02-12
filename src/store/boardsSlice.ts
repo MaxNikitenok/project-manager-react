@@ -34,7 +34,7 @@ const initialState = {
       order: 0,
       boardId: '111',
       columnId: '22',
-      description: 'string',
+      description: 'string1',
       userId: 1,
       users: ['Max', 'Elvira'],
     },
@@ -44,7 +44,7 @@ const initialState = {
       order: 1,
       boardId: '111',
       columnId: '22',
-      description: 'string',
+      description: 'string2',
       userId: 1,
       users: ['Max', 'Elvira'],
     },
@@ -54,7 +54,7 @@ const initialState = {
       order: 2,
       boardId: '111',
       columnId: '22',
-      description: 'string',
+      description: 'string3',
       userId: 1,
       users: ['Max', 'Elvira'],
     },
@@ -64,17 +64,22 @@ const initialState = {
       order: 3,
       boardId: '111',
       columnId: '22',
-      description: 'string',
+      description: 'string4',
       userId: 1,
       users: ['Max', 'Elvira'],
     },
   ],
+  newColumnOrder: null,
 } as BoardsState;
 
 const boardsSlice = createSlice({
   name: 'boards',
   initialState,
-  reducers: {},
+  reducers: {
+    setNewColumnsOrder(state, {payload}) {
+      state.newColumnOrder = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       boardsApi.endpoints.getAllBoards.matchRejected,
@@ -89,5 +94,4 @@ const boardsSlice = createSlice({
 });
 
 export default boardsSlice.reducer;
-// eslint-disable-next-line no-empty-pattern
-export const {} = boardsSlice.actions;
+export const {setNewColumnsOrder} = boardsSlice.actions;

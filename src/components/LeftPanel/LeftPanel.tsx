@@ -2,12 +2,12 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import style from './LeftPanel.module.css';
 import { RxHome, RxCalendar, RxDashboard } from 'react-icons/rx';
-import { isAuthorized } from '../../store/selectors';
+import { isAuthorizedSelector } from '../../store/selectors';
 import { useSelector } from 'react-redux';
 
 const LeftPanel = () => {
 
-  const authorized = useSelector(isAuthorized);
+  const authorized = useSelector(isAuthorizedSelector);
 
   return (
     <div className={style.LeftPanel}>

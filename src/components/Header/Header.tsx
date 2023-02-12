@@ -5,14 +5,14 @@ import { RxMagnifyingGlass } from 'react-icons/rx';
 import { resetUser } from '../../store/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { isAuthorized } from '../../store/selectors';
+import { isAuthorizedSelector } from '../../store/selectors';
 import LogOut from '../LogOut/LogOut';
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const authorized = useSelector(isAuthorized);
+  const authorized = useSelector(isAuthorizedSelector);
 
   useEffect(() => {
     if (!authorized) {

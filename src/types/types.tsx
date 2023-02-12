@@ -14,6 +14,7 @@ export interface BoardsState {
   boards: IBoard[];
   columns: IColumn[];
   tasks: ITask[];
+  newColumnOrder: IColumn[] | null;
 
 }
 

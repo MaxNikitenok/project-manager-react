@@ -3,11 +3,11 @@ import style from './SignIn.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../../services/userApi';
 import { useSelector } from 'react-redux';
-import { isAuthorized } from '../../store/selectors';
+import { isAuthorizedSelector } from '../../store/selectors';
 
 function SignIn() {
   const navigate = useNavigate();
-  const authorized = useSelector(isAuthorized);
+  const authorized = useSelector(isAuthorizedSelector);
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');

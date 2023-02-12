@@ -3,7 +3,7 @@ import style from './SignUp.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSignUpMutation } from '../../services/userApi';
 import { useSelector } from 'react-redux';
-import { isRegistrationSuccessfully } from '../../store/selectors';
+import { isRegistrationSuccessfullySelector } from '../../store/selectors';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function SignUp() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [signUp] = useSignUpMutation();
-  const isRegistration = useSelector(isRegistrationSuccessfully)
+  const isRegistration = useSelector(isRegistrationSuccessfullySelector)
 
   const close = () => {
     navigate(`/`);
