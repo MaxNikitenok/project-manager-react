@@ -1,5 +1,3 @@
-import React from 'react';
-
 const initialData = {
   tasks: {
     'task-1': {id: 'task-1', content: 'task-1 content'},

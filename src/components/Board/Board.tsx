@@ -1,38 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import style from './Board.module.css';
 import { Column } from './Column';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { useSelector } from 'react-redux';
-import {
-  columnsFromBoardSelector,
-  newColumnOrderSelector,
-  tasksFromBoardSelector,
-} from '../../store/selectors';
-import { useUpdateColumnsSetMutation } from '../../services/boardsApi';
-import { useDispatch } from 'react-redux';
-import { setNewColumnsOrder } from '../../store/boardsSlice';
+
+import { initialData } from './initialData';
+
+const InnerList = (props: { column: any; taskMap: any; index: any }) => {
+  const { column, taskMap, index } = props;
+  const tasks = column.taskIds.map(
+    (taskId: string | number) =>
+      taskMap.filter((item: { id: string | number }) => item.id === taskId)[0]
+  );
+  return <Column column={column} tasks={tasks} index={index} />;
+};
 
 export const Board = () => {
-  const columns = useSelector(columnsFromBoardSelector);
-  const tasks = useSelector(tasksFromBoardSelector);
-  const newColumnOrder = useSelector(newColumnOrderSelector);
-  const dispatch = useDispatch();
-
-  const [updateColumns] = useUpdateColumnsSetMutation();
-
-  const handleUpdateColumns = async () => {
-    if (newColumnOrder) {
-      await updateColumns(newColumnOrder).unwrap();
-    }
-  };
-
-  const [state, setState] = useState({ columns, tasks });
-
-  useUpdateColumnsSetMutation();
-
-  useEffect(() => {
-    return () => {};
-  }, []);
+  const [state, setState] = useState(initialData);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
@@ -40,157 +23,82 @@ export const Board = () => {
     if (!destination) {
       return;
     }
+
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
       return;
     }
+
     if (type === 'column') {
-      const newColumnOrder = Array.from(state.columns);
-
+      const newColumnOrder = Array.from(state.columnOrder);
       newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(
-        destination.index,
-        0,
-        state.columns.filter((column) => column._id === draggableId)[0]
-      );
-      const res = newColumnOrder.map((column, index) => {
-        return {
-          _id: column._id,
-          order: index,
-        };
-      });
-
-      dispatch(setNewColumnsOrder(res));
-      handleUpdateColumns();
-      const res2 = newColumnOrder.map((column, index) => {
-        return {
-          _id: column._id,
-          title: column.title,
-          order: index,
-          boardId: column.boardId,
-        };
-      });
+      newColumnOrder.splice(destination.index, 0, draggableId);
 
       const newState = {
         ...state,
-        columns: res2,
+        columnOrder: newColumnOrder,
       };
       setState(newState);
-
-      // const newState = {
-      //   ...state,
-      //   columns: newColumnOrder,
-      // };
-      // setState(newState);
-      // return;
-      return res;
-    }
-
-    const start = source.droppableId;
-    const finish = destination.droppableId;
-
-    console.log(start);
-    console.log(finish);
-
-    if (start === finish) {
-      const currentTasks = tasks.filter((task) => task.columnId === start);
-      const newTasksOrder = Array.from(currentTasks);
-      console.log(newTasksOrder);
-
-      newTasksOrder.splice(source.index, 1);
-      console.log(newTasksOrder);
-      newTasksOrder.splice(
-        destination.index,
-        0,
-        state.tasks.filter((task) => task._id === draggableId)[0]
-      );
-      console.log(newTasksOrder);
-
-      const newOrderedColumn = newTasksOrder.map((task, index) => {
-        return {
-          _id: task._id,
-          order: index,
-        };
-      });
-
-      const res3 = newTasksOrder.map((task, index) => {
-        return {
-          _id: task._id,
-          title: task.title,
-          order: index,
-          boardId: task.boardId,
-          columnId: task.columnId,
-          description: task.description,
-          userId: task.userId,
-          users: task.users,
-        };
-      });
-      console.log(res3);
-      
-
-      const newState = {
-        ...state,
-        tasks: res3,
-      };
-      setState(newState);
-        
       return;
     }
-    const currentStartTasks = tasks.filter((task) => task.columnId === start);
-    console.log('currentStartTasks', currentStartTasks);
-    
-    const startTaskIds = Array.from(currentStartTasks);
-    console.log('startTaskIds', startTaskIds);
-startTaskIds.splice(source.index, 1)
-    const newStart = startTaskIds.map((task, index) => {
-      return {
-        _id: task._id,
-        title: task.title,
-        order: index,
-        boardId: task.boardId,
-        columnId: task.columnId,
-        description: task.description,
-        userId: task.userId,
-        users: task.users,
+
+    const home = state.columns.filter(
+      (item) => item.id === source.droppableId
+    )[0];
+
+    const foreign = state.columns.filter(
+      (item) => item.id === destination.droppableId
+    )[0];
+
+    if (home === foreign) {
+      const newTaskIds = Array.from(home.taskIds);
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+
+      const newHome = {
+        ...home,
+        taskIds: newTaskIds,
       };
-    });
-    console.log(newStart);
-    
 
-    const currentFinishTasks = tasks.filter((task) => task.columnId === finish);
-    const finishTaskIds = Array.from(currentFinishTasks);
-    console.log('finishTaskIds', finishTaskIds);
-    console.log('yyyy', state.tasks.filter((task) => task._id === draggableId)[0]);
-    
-   finishTaskIds.splice(destination.index, 0, state.tasks.filter((task) => task._id === draggableId)[0]) 
-
-    const newFinish = finishTaskIds.map((task, index) => {
-      return {
-        _id: task._id,
-        title: task.title,
-        order: index,
-        boardId: task.boardId,
-        columnId: finish,
-        description: task.description,
-        userId: task.userId,
-        users: task.users,
+      const newState = {
+        ...state,
+        columns: [
+          ...state.columns.filter((item) => item.id !== source.droppableId),
+          newHome,
+        ],
       };
-    });
 
-    console.log(newFinish);
-    
+      setState(newState);
+      return;
+    }
+
+    // moving from one list to another
+    const homeTaskIds = Array.from(home.taskIds);
+    homeTaskIds.splice(source.index, 1);
+    const newHome = {
+      ...home,
+      taskIds: homeTaskIds,
+    };
+
+    const foreignTaskIds = Array.from(foreign.taskIds);
+    foreignTaskIds.splice(destination.index, 0, draggableId);
+    const newForeign = {
+      ...foreign,
+      taskIds: foreignTaskIds,
+    };
+
     const newState = {
       ...state,
-      tasks: [
-        ...state.tasks.filter((task) => task.columnId !== start && task.columnId !== finish),
-        ...newStart,
-        ...newFinish,
-      ]
+      columns: [
+        ...state.columns
+          .filter((item) => item.id !== newHome.id)
+          .filter((item) => item.id !== newForeign.id),
+        newHome,
+        newForeign,
+      ],
     };
-    console.log(newState);
-    
     setState(newState);
   };
 
@@ -208,17 +116,17 @@ startTaskIds.splice(source.index, 1)
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {state.columns.map((item, index) => {
-                const column = state.columns[item.order];
-                const tasks = state.tasks.filter(
-                  (task) => task.columnId === column._id
-                );
+              {state.columnOrder.map((columnId, index) => {
+
+                const column = state.columns.filter(
+                  (item) => item.id === columnId
+                )[0];
 
                 return (
-                  <Column
-                    key={column._id}
+                  <InnerList
+                    key={column.id}
                     column={column}
-                    tasks={tasks}
+                    taskMap={state.tasks}
                     index={index}
                   />
                 );

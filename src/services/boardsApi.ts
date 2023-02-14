@@ -16,30 +16,13 @@ export const boardsApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    // signUp: build.mutation({
-    //   query: (body) => ({
-    //     url: 'auth/signup',
-    //     method: 'POST',
-    //     body,
-    //   }),
-    // }),
-    // signIn: build.mutation({
-    //   query: (body) => ({
-    //     url: 'auth/signin',
-    //     method: 'POST',
-    //     body,
-    //   }),
-    // }),
-    // getUsers: build.query<UsersResponse, void>({
-    //   query: () => 'users/',
-    // }),
     getAllBoards: build.query<BoardsResponse, void>({
       query: () => 'boards/',
     }),
-    getColumnsFromBoard: build.query<ColumnsResponse, void>({
+    getColumnsFromBoard: build.query<ColumnsResponse, string>({
       query: (boardId) => `boards/${boardId}/columns`,
     }),
-    getTasksFromBoard: build.query<TasksResponse, void>({
+    getTasksFromBoard: build.query<TasksResponse, string>({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
     updateColumnsSet: build.mutation({
@@ -58,8 +41,3 @@ export const {
   useGetTasksFromBoardQuery,
   useUpdateColumnsSetMutation,
 } = boardsApi;
-
-// const columnsUrl = '/columns/';
-// const columnsSetUrl = 'columnsSet/';
-// const tasksUrl = '/tasks/';
-// const tasksSetUrl = 'tasksSet/';

@@ -40,6 +40,7 @@ export interface IColumn {
   title: string;
   order: number;
   boardId: string;
+  taskIds: string[];
 }
 
 export type ColumnsResponse = IColumn[];
