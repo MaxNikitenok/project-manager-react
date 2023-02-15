@@ -18,7 +18,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
   
 // }
 
-export const Column = (props: { column: { id: string; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }; index: number; tasks: {id: string; content: string}[]; }) => {
+export const Column = (props: { column: { id: string; title: string }; index: number; tasks: {id: string; description: string}[]; }) => {
   return (
     <Draggable draggableId={props.column.id} index={props.index}>
       {(provided) => (
@@ -35,7 +35,7 @@ export const Column = (props: { column: { id: string; title: string | number | b
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {props.tasks.map((task: {id: string; content: string}, index: any) => (
+                {props.tasks.map((task: {id: string; description: string}, index: any) => (
                   <Task key={task.id} task={task} index={index} />
                 ))}
                 {provided.placeholder}

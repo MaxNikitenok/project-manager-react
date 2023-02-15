@@ -6,4 +6,4 @@ export const isRegistrationSuccessfullySelector = (state: State) => state.user.i
 
 export const columnsFromBoardSelector = (state: State) => state.boards.columns;
 export const tasksFromBoardSelector = (state: State) => state.boards.tasks;
-export const newColumnOrderSelector = (state: State) => state.boards.newColumnOrder;
+export const columnOrderSelector = (state: State) => state.boards.columnOrder;

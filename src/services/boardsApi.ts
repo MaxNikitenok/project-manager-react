@@ -25,6 +25,7 @@ export const boardsApi = createApi({
     getTasksFromBoard: build.query<TasksResponse, string>({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
+    //types for response & request
     updateColumnsSet: build.mutation({
       query: (body: { _id: string; order: number }[]) => ({
         url: `columnsSet`,

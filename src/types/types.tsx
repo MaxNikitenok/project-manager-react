@@ -12,9 +12,9 @@ export interface UserState {
 
 export interface BoardsState {
   boards: IBoard[];
-  columns: IColumn[];
+  columns: ColumnState[];
   tasks: ITask[];
-  newColumnOrder: IColumn[] | null;
+  columnOrder: string[];
 
 }
 
@@ -40,10 +40,13 @@ export interface IColumn {
   title: string;
   order: number;
   boardId: string;
-  taskIds: string[];
 }
 
 export type ColumnsResponse = IColumn[];
+
+export interface ColumnState extends IColumn {
+  taskIds: string[]; 
+}
 
 export interface ITask {
   _id: string;

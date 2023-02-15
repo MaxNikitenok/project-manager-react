@@ -4,17 +4,26 @@ import { Column } from './Column';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { initialData } from './initialData';
+import { useGetColumnsFromBoardQuery, useGetTasksFromBoardQuery } from '../../services/boardsApi';
+import { useSelector } from 'react-redux';
+import { columnOrderSelector } from '../../store/selectors';
 
 const InnerList = (props: { column: any; taskMap: any; index: any }) => {
   const { column, taskMap, index } = props;
   const tasks = column.taskIds.map(
-    (taskId: string | number) =>
-      taskMap.filter((item: { id: string | number }) => item.id === taskId)[0]
+    (taskId: string) =>
+      taskMap.filter((item: { id: string }) => item.id === taskId)[0]
   );
   return <Column column={column} tasks={tasks} index={index} />;
 };
 
 export const Board = () => {
+
+  const columnOrder = useSelector(columnOrderSelector);
+
+const {data: columnsData} = useGetColumnsFromBoardQuery("63d4375f99bc1987263866e2")
+const {data: tasksData} = useGetTasksFromBoardQuery("63d4375f99bc1987263866e2")
+ 
   const [state, setState] = useState(initialData);
 
   const onDragEnd = (result: DropResult) => {
