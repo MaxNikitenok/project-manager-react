@@ -18,9 +18,9 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
   
 // }
 
-export const Column = (props: { column: { id: string; title: string }; index: number; tasks: {id: string; description: string}[]; }) => {
+export const Column = (props: { column: { _id: string; title: string }; index: number; tasks: {_id: string; description: string}[]; }) => {
   return (
-    <Draggable draggableId={props.column.id} index={props.index}>
+    <Draggable draggableId={props.column._id} index={props.index}>
       {(provided) => (
         <div
           className={style.container}
@@ -28,15 +28,15 @@ export const Column = (props: { column: { id: string; title: string }; index: nu
           ref={provided.innerRef}
         >
           <div className={style.title} {...provided.dragHandleProps}>{props.column.title}</div>
-          <Droppable droppableId={props.column.id} type='task'>
+          <Droppable droppableId={props.column._id} type='task'>
             {(provided) => (
               <div
                 className={style.taskList}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {props.tasks.map((task: {id: string; description: string}, index: any) => (
-                  <Task key={task.id} task={task} index={index} />
+                {props.tasks.map((task: {_id: string; description: string}, index: any) => (
+                  <Task key={task._id} task={task} index={index} />
                 ))}
                 {provided.placeholder}
               </div>

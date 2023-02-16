@@ -26,8 +26,8 @@ export const boardsApi = createApi({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
     //types for response & request
-    updateColumnsSet: build.mutation({
-      query: (body: { _id: string; order: number }[]) => ({
+    updateColumnsSet: build.mutation<ColumnsResponse, { _id: string; order: number }[]>({
+      query: (body) => ({
         url: `columnsSet`,
         method: 'PATCH',
         body,

@@ -3,9 +3,9 @@ import style from './Task.module.css';
 import { Draggable } from 'react-beautiful-dnd';
 
 
-export const Task = (props: { task: { id: string; description: string; }; index: number; }) => {
+export const Task = (props: { task: any; index: number; }) => {
   return (
-    <Draggable draggableId={props.task.id} index={props.index}>
+    <Draggable draggableId={props.task._id} index={props.index}>
       {(provided) => (
         <div
           className={style.container}
@@ -13,7 +13,7 @@ export const Task = (props: { task: { id: string; description: string; }; index:
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          {props.task.description}
+          {props.task.title}
         </div>
       )}
     </Draggable>

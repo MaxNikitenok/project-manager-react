@@ -52,9 +52,9 @@ const boardsSlice = createSlice({
     builder.addMatcher(
       boardsApi.endpoints.updateColumnsSet.matchFulfilled,
       (state, { payload }) => {
-        console.log('tasks', payload);
-
-        state.columns = payload;
+        state.columns = payload.map((item) => ({...item, taskIds: []}))
+        const order = Array.from(payload).sort((a, b) => a.order - b.order).map((column) => column._id)
+        state.columnOrder = order;
       }
     );
   },
