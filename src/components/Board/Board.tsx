@@ -4,7 +4,7 @@ import { Column } from './Column';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { initialData } from './initialData';
-import { useGetColumnsFromBoardQuery, useGetTasksFromBoardQuery, useUpdateColumnsSetMutation } from '../../services/boardsApi';
+import { useGetColumnsFromBoardQuery, useGetTasksFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
 import { columnOrderSelector, columnsFromBoardSelector, tasksFromBoardSelector } from '../../store/selectors';
 
@@ -25,14 +25,15 @@ export const Board = () => {
 
 const {data: columnsData} = useGetColumnsFromBoardQuery("63d4375f99bc1987263866e2");
 const {data: tasksData} = useGetTasksFromBoardQuery("63d4375f99bc1987263866e2");
-const [updateColumn] = useUpdateColumnsSetMutation();
+const [updateColumns] = useUpdateColumnsSetMutation();
+const [updateTasks] = useUpdateTasksSetMutation()
 
 const handleUpdateColumns = async (orderList: { _id: string; order: number; }[]) => {
-  
+    await updateColumns(orderList);
+};
 
-  
-  
-  await updateColumn(orderList);
+const handleUpdateTasks = async (orderList: { _id: string; order: number; columnId: string}[]) => {
+    await updateTasks(orderList);
 }
  
   const [state, setState] = useState(initialData);
@@ -69,7 +70,6 @@ const handleUpdateColumns = async (orderList: { _id: string; order: number; }[])
         columns: newOrderForColumns,
         columnOrder: newColumnOrder,
       };
-      console.log(newState);
       
       setState(newState);
       const newOrderList = Array.from(newState.columns).map((column) => ({_id: column._id, order: column.order}))
@@ -87,8 +87,11 @@ const handleUpdateColumns = async (orderList: { _id: string; order: number; }[])
 
     if (home === foreign) {
       const newTaskIds = Array.from(home.taskIds);
+      console.log(newTaskIds);
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
+      console.log(newTaskIds);
+      
 
       const newHome = {
         ...home,
@@ -104,6 +107,12 @@ const handleUpdateColumns = async (orderList: { _id: string; order: number; }[])
       };
 
       setState(newState);
+      
+      const newOrderForTasks = Array.from(newState.tasks).filter((task) => home.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newTaskIds.indexOf(task._id), columnId: home._id}))
+      handleUpdateTasks(newOrderForTasks);
+      console.log(newOrderForTasks);
+      
+      
       return;
     }
 
@@ -133,6 +142,13 @@ const handleUpdateColumns = async (orderList: { _id: string; order: number; }[])
       ],
     };
     setState(newState);
+   
+
+    const newOrderForHomeTasks = Array.from(newState.tasks).filter((task) => newHome.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newHome.taskIds.indexOf(task._id), columnId: home._id}))
+    const newOrderForForeignTasks = Array.from(newState.tasks).filter((task) => newForeign.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newForeign.taskIds.indexOf(task._id), columnId: foreign._id}))
+    
+      handleUpdateTasks([...newOrderForHomeTasks, ...newOrderForForeignTasks]);
+      
   };
 
   return (

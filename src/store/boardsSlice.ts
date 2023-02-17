@@ -13,8 +13,8 @@ const boardsSlice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    setColumns(state, { payload}) {
-      state.columns = payload
+    setColumns(state, { payload }) {
+      state.columns = payload;
     },
     setNewColumnsOrder(state, { payload }) {
       state.columnOrder = payload;
@@ -33,11 +33,11 @@ const boardsSlice = createSlice({
     builder.addMatcher(
       boardsApi.endpoints.getColumnsFromBoard.matchFulfilled,
       (state, { payload }) => {
-        
-        state.columns = payload.map((item) => ({...item, taskIds: []}))
-        const order = Array.from(payload).sort((a, b) => a.order - b.order).map((column) => column._id)
+        state.columns = payload.map((item) => ({ ...item, taskIds: [] }));
+        const order = Array.from(payload)
+          .sort((a, b) => a.order - b.order)
+          .map((column) => column._id);
         state.columnOrder = order;
-        
       }
     );
     builder.addMatcher(
@@ -45,16 +45,36 @@ const boardsSlice = createSlice({
       (state, { payload }) => {
         state.tasks = payload;
         state.columns.map((column) => {
-          column.taskIds = state.tasks.filter((task) => task.columnId === column._id).map((task) => task._id)
-        })
+          return column.taskIds = state.tasks
+            .filter((task) => task.columnId === column._id)
+            .sort((a, b) => a.order - b.order)
+            .map((task) => task._id);
+            
+        });
       }
     );
     builder.addMatcher(
       boardsApi.endpoints.updateColumnsSet.matchFulfilled,
       (state, { payload }) => {
-        state.columns = payload.map((item) => ({...item, taskIds: []}))
-        const order = Array.from(payload).sort((a, b) => a.order - b.order).map((column) => column._id)
+        state.columns = payload.map((item) => ({ ...item, taskIds: [] }));
+        const order = Array.from(payload)
+          .sort((a, b) => a.order - b.order)
+          .map((column) => column._id);
         state.columnOrder = order;
+      }
+    );
+    builder.addMatcher(
+      boardsApi.endpoints.updateTasksSet.matchFulfilled,
+      (state, { payload }) => {
+        const arrIds = payload.map((task) => task._id)
+        state.tasks = [...(state.tasks.filter((task) => !arrIds.includes(task._id))), ...payload]
+
+        state.columns.map((column) => {
+          return column.taskIds = state.tasks
+            .filter((task) => task.columnId === column._id)
+            .sort((a, b) => a.order - b.order)
+            .map((task) => task._id);
+        });
       }
     );
   },

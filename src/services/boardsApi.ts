@@ -25,10 +25,16 @@ export const boardsApi = createApi({
     getTasksFromBoard: build.query<TasksResponse, string>({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
-    //types for response & request
     updateColumnsSet: build.mutation<ColumnsResponse, { _id: string; order: number }[]>({
       query: (body) => ({
         url: `columnsSet`,
+        method: 'PATCH',
+        body,
+      }),
+    }),
+    updateTasksSet: build.mutation<TasksResponse, { _id: string; order: number; columnId: string }[]>({
+      query: (body) => ({
+        url: `tasksSet`,
         method: 'PATCH',
         body,
       }),
@@ -41,4 +47,5 @@ export const {
   useGetColumnsFromBoardQuery,
   useGetTasksFromBoardQuery,
   useUpdateColumnsSetMutation,
+  useUpdateTasksSetMutation,
 } = boardsApi;
