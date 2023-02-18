@@ -15,17 +15,18 @@ export const boardsApi = createApi({
       return headers;
     },
   }),
+  keepUnusedDataFor: 0,
   endpoints: (build) => ({
     getAllBoards: build.query<BoardsResponse, void>({
       query: () => 'boards/',
     }),
-    getColumnsFromBoard: build.query<ColumnsResponse, string>({
+    getColumnsFromBoard: build.query<ColumnsResponse, string | undefined>({
       query: (boardId) => `boards/${boardId}/columns`,
     }),
-    getTasksFromBoard: build.query<TasksResponse, string>({
+    getTasksFromBoard: build.query<TasksResponse, string | undefined>({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
-    getTasksFromColumn: build.query<TasksResponse, {boardId: string; columnId: string}>({
+    getTasksFromColumn: build.query<TasksResponse, {boardId: string | undefined; columnId: string}>({
       query: ({boardId, columnId}) => `boards/${boardId}/columns/${columnId}/tasks`,
     }),
     updateColumnsSet: build.mutation<ColumnsResponse, { _id: string; order: number }[]>({

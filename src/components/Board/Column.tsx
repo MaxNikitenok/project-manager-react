@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import style from './Column.module.css';
 import { Task } from './Task';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { useGetTasksFromColumnQuery } from '../../services/boardsApi';
+import { useGetTasksFromBoardQuery } from '../../services/boardsApi';
 // import { IColumn, ITask } from '../../types/types';
 
 // const InnerList = (props) => {
@@ -19,9 +19,16 @@ import { useGetTasksFromColumnQuery } from '../../services/boardsApi';
   
 // }
 
-export const Column = (props: { column: { _id: string; title: string }; index: number; tasks: {_id: string; description: string}[]; }) => {
+export const Column = (props: { boardId: string | undefined; column: { _id: string; title: string }; index: number; tasks: {_id: string; description: string}[]; }) => {
 
-  const {data: tasksData} = useGetTasksFromColumnQuery({boardId: "63d4375f99bc1987263866e2", columnId: props.column._id});
+  const {refetch} = useGetTasksFromBoardQuery(props.boardId);
+
+  useEffect(() => {
+    
+
+      refetch()
+
+  }, [refetch]);
 
   return (
     <Draggable draggableId={props.column._id} index={props.index}>

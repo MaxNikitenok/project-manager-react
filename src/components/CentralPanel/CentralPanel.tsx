@@ -6,9 +6,9 @@ import Calendar from '../Calendar/Calendar';
 import Home from '../Home/Home';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
+import { Board } from '../Board/Board';
 
 const CentralPanel = () => {
-  
   const NoMatch = () => {
     return (
       <div className={style.noMatch}>
@@ -22,8 +22,9 @@ const CentralPanel = () => {
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/boards" element={<Boards />} />
+        <Route path="/boards/:boardId" element={<Board />} />
         <Route path="/calendar" element={<Calendar />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signUp" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>

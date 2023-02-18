@@ -9,6 +9,10 @@
   border: 1px solid;
 }
 
+.boardItem:hover {
+  cursor: pointer;
+}
+
 .columnContainer {
   display: flex;
 }

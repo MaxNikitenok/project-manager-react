@@ -6,44 +6,52 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useGetColumnsFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
 import { columnOrderSelector, columnsFromBoardSelector, tasksFromBoardSelector } from '../../store/selectors';
-import { setColumns, setNewColumnsOrder } from '../../store/boardsSlice';
+import { setColumns, setNewColumnsOrder, setTasks } from '../../store/boardsSlice';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-const InnerList = (props: { column: any; taskMap: any; index: any }) => {
-  const { column, taskMap, index } = props;
+const InnerList = (props: { boardId: string | undefined; column: any; taskMap: any; index: any }) => {
+  const { boardId, column, taskMap, index } = props;
   const tasks = column.taskIds.map(
     (taskId: string) =>
       taskMap.filter((item: { _id: string }) => item._id === taskId)[0]
   );
-  return <Column column={column} tasks={tasks} index={index} />;
+  return <Column boardId={boardId} column={column} tasks={tasks} index={index} />;
 };
 
 export const Board = () => {
+
+  const {boardId} = useParams();
 
   const columnOrder = useSelector(columnOrderSelector);
   const columns = useSelector(columnsFromBoardSelector);
   const tasks = useSelector(tasksFromBoardSelector);
   const dispatch = useDispatch();
 
-const {data: columnsData} = useGetColumnsFromBoardQuery("63d4375f99bc1987263866e2");
+const {refetch} = useGetColumnsFromBoardQuery(boardId);
 
 const [updateColumns] = useUpdateColumnsSetMutation();
 const [updateTasks] = useUpdateTasksSetMutation()
 
 const handleUpdateColumns = async (orderList: { _id: string; order: number; }[]) => {
-    await updateColumns(orderList);
-    
+    await updateColumns(orderList);   
 };
 
 const handleUpdateTasks = async (orderList: { _id: string; order: number; columnId: string}[]) => {
     await updateTasks(orderList);
 }
- 
-  // const [state, setState] = useState(initialData);
 
-  useEffect(() => {
+useEffect(() => {
+    
 
-  }, [columns, tasks]);
+    refetch()
+    return () => {
+      dispatch(setColumns([]));
+      dispatch(setTasks([]));
+      dispatch(setNewColumnsOrder([]));
+    }
+
+}, [dispatch, refetch]);
 
   const onDragEnd = (result: DropResult) => {
 
@@ -163,6 +171,7 @@ const handleUpdateTasks = async (orderList: { _id: string; order: number; column
                 return (
                   <InnerList
                     key={column._id}
+                    boardId={boardId}
                     column={column}
                     taskMap={tasks}
                     index={index}
