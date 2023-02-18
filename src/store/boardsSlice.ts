@@ -16,11 +16,20 @@ const boardsSlice = createSlice({
     setColumns(state, { payload }) {
       state.columns = payload;
     },
+    setTasks(state, { payload }) {
+      state.tasks = payload;
+    },
     setNewColumnsOrder(state, { payload }) {
       state.columnOrder = payload;
     },
   },
   extraReducers: (builder) => {
+    builder.addMatcher(
+      boardsApi.endpoints.getAllBoards.matchFulfilled,
+      (state, { payload }) => {
+        state.boards = payload;
+      }
+    );
     builder.addMatcher(
       boardsApi.endpoints.getAllBoards.matchRejected,
       (state, { payload }) => {
@@ -54,9 +63,22 @@ const boardsSlice = createSlice({
       }
     );
     builder.addMatcher(
+      boardsApi.endpoints.getTasksFromColumn.matchFulfilled,
+      (state, { payload }) => {
+        state.tasks = [...state.tasks, ...payload];
+        state.columns.map((column) => {
+          return column.taskIds = state.tasks
+            .filter((task) => task.columnId === column._id)
+            .sort((a, b) => a.order - b.order)
+            .map((task) => task._id);
+            
+        });
+      }
+    );
+    builder.addMatcher(
       boardsApi.endpoints.updateColumnsSet.matchFulfilled,
       (state, { payload }) => {
-        state.columns = payload.map((item) => ({ ...item, taskIds: [] }));
+        state.columns = payload.map((item) => ({ ...item, taskIds: state.columns.filter((column) => column._id === item._id)[0].taskIds }));
         const order = Array.from(payload)
           .sort((a, b) => a.order - b.order)
           .map((column) => column._id);
@@ -81,4 +103,4 @@ const boardsSlice = createSlice({
 });
 
 export default boardsSlice.reducer;
-export const { setColumns, setNewColumnsOrder } = boardsSlice.actions;
+export const { setColumns, setTasks, setNewColumnsOrder } = boardsSlice.actions;

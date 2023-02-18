@@ -2,6 +2,7 @@ import React from 'react';
 import style from './Column.module.css';
 import { Task } from './Task';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { useGetTasksFromColumnQuery } from '../../services/boardsApi';
 // import { IColumn, ITask } from '../../types/types';
 
 // const InnerList = (props) => {
@@ -19,6 +20,9 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 // }
 
 export const Column = (props: { column: { _id: string; title: string }; index: number; tasks: {_id: string; description: string}[]; }) => {
+
+  const {data: tasksData} = useGetTasksFromColumnQuery({boardId: "63d4375f99bc1987263866e2", columnId: props.column._id});
+
   return (
     <Draggable draggableId={props.column._id} index={props.index}>
       {(provided) => (

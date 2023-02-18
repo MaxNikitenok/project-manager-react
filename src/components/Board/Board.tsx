@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import style from './Board.module.css';
 import { Column } from './Column';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
-import { initialData } from './initialData';
-import { useGetColumnsFromBoardQuery, useGetTasksFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
+import { useGetColumnsFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
 import { columnOrderSelector, columnsFromBoardSelector, tasksFromBoardSelector } from '../../store/selectors';
+import { setColumns, setNewColumnsOrder } from '../../store/boardsSlice';
+import { useDispatch } from 'react-redux';
 
 const InnerList = (props: { column: any; taskMap: any; index: any }) => {
   const { column, taskMap, index } = props;
@@ -20,28 +21,29 @@ const InnerList = (props: { column: any; taskMap: any; index: any }) => {
 export const Board = () => {
 
   const columnOrder = useSelector(columnOrderSelector);
-  const newColumns = useSelector(columnsFromBoardSelector);
-  const newTasks = useSelector(tasksFromBoardSelector);
+  const columns = useSelector(columnsFromBoardSelector);
+  const tasks = useSelector(tasksFromBoardSelector);
+  const dispatch = useDispatch();
 
 const {data: columnsData} = useGetColumnsFromBoardQuery("63d4375f99bc1987263866e2");
-const {data: tasksData} = useGetTasksFromBoardQuery("63d4375f99bc1987263866e2");
+
 const [updateColumns] = useUpdateColumnsSetMutation();
 const [updateTasks] = useUpdateTasksSetMutation()
 
 const handleUpdateColumns = async (orderList: { _id: string; order: number; }[]) => {
     await updateColumns(orderList);
+    
 };
 
 const handleUpdateTasks = async (orderList: { _id: string; order: number; columnId: string}[]) => {
     await updateTasks(orderList);
 }
  
-  const [state, setState] = useState(initialData);
+  // const [state, setState] = useState(initialData);
 
   useEffect(() => {
-    setState({boards: [], columns: newColumns, tasks: newTasks, columnOrder: columnOrder})
-    
-  }, [newColumns, newTasks, columnOrder])
+
+  }, [columns, tasks]);
 
   const onDragEnd = (result: DropResult) => {
 
@@ -59,59 +61,49 @@ const handleUpdateTasks = async (orderList: { _id: string; order: number; column
     }
 
     if (type === 'column') {
-      const newColumnOrder = Array.from(state.columnOrder);
+      const newColumnOrder = Array.from(columnOrder);
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
 
-      const newOrderForColumns = Array.from(state.columns).map((column) => ({...column, order: newColumnOrder.indexOf(column._id)}))
+      const newOrderForColumns = Array.from(columns).map((column) => ({...column, order: newColumnOrder.indexOf(column._id)}))
 
-      const newState = {
-        ...state,
-        columns: newOrderForColumns,
-        columnOrder: newColumnOrder,
-      };
+      dispatch(setColumns(newOrderForColumns))
+      dispatch(setNewColumnsOrder(newColumnOrder))
       
-      setState(newState);
-      const newOrderList = Array.from(newState.columns).map((column) => ({_id: column._id, order: column.order}))
+      const newOrderList = Array.from(columns).map((column) => ({_id: column._id, order: newColumnOrder.indexOf(column._id)}))
+      
       handleUpdateColumns(newOrderList);
       return;
     }
 
-    const home = state.columns.filter(
+    const home = columns.filter(
       (item) => item._id === source.droppableId
     )[0];
 
-    const foreign = state.columns.filter(
+    const foreign = columns.filter(
       (item) => item._id === destination.droppableId
     )[0];
 
     if (home === foreign) {
       const newTaskIds = Array.from(home.taskIds);
-      console.log(newTaskIds);
+
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
-      console.log(newTaskIds);
-      
 
       const newHome = {
         ...home,
         taskIds: newTaskIds,
       };
 
-      const newState = {
-        ...state,
-        columns: [
-          ...state.columns.filter((item) => item._id !== source.droppableId),
-          newHome,
-        ],
-      };
+      const restColumns = columns.filter((item) => item._id !== source.droppableId)
 
-      setState(newState);
-      
-      const newOrderForTasks = Array.from(newState.tasks).filter((task) => home.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newTaskIds.indexOf(task._id), columnId: home._id}))
+      dispatch(setColumns([
+        ...restColumns,
+          newHome,
+        ],))
+
+      const newOrderForTasks = Array.from(tasks).filter((task) => home.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newTaskIds.indexOf(task._id), columnId: home._id}))
       handleUpdateTasks(newOrderForTasks);
-      console.log(newOrderForTasks);
-      
       
       return;
     }
@@ -131,21 +123,18 @@ const handleUpdateTasks = async (orderList: { _id: string; order: number; column
       taskIds: foreignTaskIds,
     };
 
-    const newState = {
-      ...state,
-      columns: [
-        ...state.columns
+    const restColumns = columns
           .filter((item) => item._id !== newHome._id)
-          .filter((item) => item._id !== newForeign._id),
+          .filter((item) => item._id !== newForeign._id)
+
+   dispatch(setColumns([
+        ...restColumns,
         newHome,
         newForeign,
-      ],
-    };
-    setState(newState);
-   
+      ]))
 
-    const newOrderForHomeTasks = Array.from(newState.tasks).filter((task) => newHome.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newHome.taskIds.indexOf(task._id), columnId: home._id}))
-    const newOrderForForeignTasks = Array.from(newState.tasks).filter((task) => newForeign.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newForeign.taskIds.indexOf(task._id), columnId: foreign._id}))
+    const newOrderForHomeTasks = Array.from(tasks).filter((task) => newHome.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newHome.taskIds.indexOf(task._id), columnId: home._id}))
+    const newOrderForForeignTasks = Array.from(tasks).filter((task) => newForeign.taskIds.includes(task._id)).map((task) => ({_id: task._id, order: newForeign.taskIds.indexOf(task._id), columnId: foreign._id}))
     
       handleUpdateTasks([...newOrderForHomeTasks, ...newOrderForForeignTasks]);
       
@@ -165,9 +154,9 @@ const handleUpdateTasks = async (orderList: { _id: string; order: number; column
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {state.columnOrder.map((columnId, index) => {
+              {columnOrder.map((columnId, index) => {
 
-                const column = state.columns.filter(
+                const column = columns.filter(
                   (item) => item._id === columnId
                 )[0];
 
@@ -175,7 +164,7 @@ const handleUpdateTasks = async (orderList: { _id: string; order: number; column
                   <InnerList
                     key={column._id}
                     column={column}
-                    taskMap={state.tasks}
+                    taskMap={tasks}
                     index={index}
                   />
                 );
