@@ -3,8 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { userApi } from '../services/userApi';
 
 const initialState = {
-  name: null,
-  login: null,
   isAuthorized: !!localStorage.getItem('token'),
   isRegistrationSuccessfully: false,
 } as UserState;
@@ -13,9 +11,13 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setUserLogin: (state, { payload }) => {
+      localStorage.setItem('userLogin', payload);
+    },
     resetUser: (state) => {
-      state.name = null;
-      state.login = null;
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userLogin');
+      localStorage.removeItem('userName');
       localStorage.removeItem('token');
       state.isAuthorized = !!localStorage.getItem('token');
     },
@@ -24,8 +26,6 @@ const userSlice = createSlice({
     builder.addMatcher(
       userApi.endpoints.signUp.matchFulfilled,
       (state, { payload }) => {
-        state.name = payload.name;
-        state.login = payload.login;
         state.isRegistrationSuccessfully = true;
       }
     );
@@ -36,8 +36,19 @@ const userSlice = createSlice({
         state.isAuthorized = true;
       }
     );
+    builder.addMatcher(
+      userApi.endpoints.getUsers.matchFulfilled,
+      (state, { payload }) => {
+        const user = payload.filter(
+          (user) => user.login === localStorage.getItem('userLogin')
+        )[0];
+        localStorage.setItem('userId', user._id);
+        localStorage.setItem('userLogin', user.login);
+        localStorage.setItem('userName', user.name);
+      }
+    );
   },
 });
 
 export default userSlice.reducer;
-export const { resetUser } = userSlice.actions;
+export const { setUserLogin, resetUser } = userSlice.actions;

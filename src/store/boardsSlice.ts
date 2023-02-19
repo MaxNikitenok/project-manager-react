@@ -1,6 +1,8 @@
+import { useDispatch } from 'react-redux';
 import { BoardsState } from './../types/types';
 import { createSlice } from '@reduxjs/toolkit';
 import { boardsApi } from '../services/boardsApi';
+import { resetUser } from './userSlice';
 
 const initialState = {
   boards: [],
@@ -36,6 +38,7 @@ const boardsSlice = createSlice({
         if (payload?.status === 403) {
           alert('token is dead');
           localStorage.removeItem('token');
+          resetUser()
         }
       }
     );

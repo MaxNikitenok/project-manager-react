@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../../services/userApi';
 import { useSelector } from 'react-redux';
 import { isAuthorizedSelector } from '../../store/selectors';
+import { useDispatch } from 'react-redux';
+import { setUserLogin } from '../../store/userSlice';
 
 function SignIn() {
   const navigate = useNavigate();
   const authorized = useSelector(isAuthorizedSelector);
+  const dispatch = useDispatch();
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -18,6 +21,7 @@ function SignIn() {
       login: login,
       password: password,
     });
+    dispatch(setUserLogin(login))
   };
 
   const close = () => {
@@ -27,7 +31,7 @@ function SignIn() {
   useEffect(
     () => {
       if (authorized === true) {
-        navigate(`/boards`);
+        navigate(`/`);
       }
     },
     [authorized, navigate],
