@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BoardsResponse, ColumnsResponse, TasksResponse } from '../types/types';
+import {
+  BoardsResponse,
+  ColumnsResponse,
+  IBoard,
+  TasksResponse,
+} from '../types/types';
 
 export const boardsApi = createApi({
   reducerPath: 'boardsApi',
@@ -18,7 +23,27 @@ export const boardsApi = createApi({
   keepUnusedDataFor: 0,
   endpoints: (build) => ({
     getAllBoards: build.query<BoardsResponse, void>({
-      query: () => 'boards/',
+      query: () => 'boards',
+    }),
+    createBoard: build.mutation<
+      IBoard,
+      {
+        title: string;
+        owner: string;
+        users: [string];
+      }
+    >({
+      query: (body) => ({
+        url: `boards`,
+        method: 'POST',
+        body,
+      }),
+    }),
+    deleteBoard: build.mutation<IBoard, string>({
+      query: (boardId) => ({
+        url: `boards/${boardId}`,
+        method: 'DELETE',
+      }),
     }),
     getColumnsFromBoard: build.query<ColumnsResponse, string | undefined>({
       query: (boardId) => `boards/${boardId}/columns`,
@@ -26,17 +51,27 @@ export const boardsApi = createApi({
     getTasksFromBoard: build.query<TasksResponse, string | undefined>({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
-    getTasksFromColumn: build.query<TasksResponse, {boardId: string | undefined; columnId: string}>({
-      query: ({boardId, columnId}) => `boards/${boardId}/columns/${columnId}/tasks`,
+    getTasksFromColumn: build.query<
+      TasksResponse,
+      { boardId: string | undefined; columnId: string }
+    >({
+      query: ({ boardId, columnId }) =>
+        `boards/${boardId}/columns/${columnId}/tasks`,
     }),
-    updateColumnsSet: build.mutation<ColumnsResponse, { _id: string; order: number }[]>({
+    updateColumnsSet: build.mutation<
+      ColumnsResponse,
+      { _id: string; order: number }[]
+    >({
       query: (body) => ({
         url: `columnsSet`,
         method: 'PATCH',
         body,
       }),
     }),
-    updateTasksSet: build.mutation<TasksResponse, { _id: string; order: number; columnId: string }[]>({
+    updateTasksSet: build.mutation<
+      TasksResponse,
+      { _id: string; order: number; columnId: string }[]
+    >({
       query: (body) => ({
         url: `tasksSet`,
         method: 'PATCH',
@@ -48,6 +83,8 @@ export const boardsApi = createApi({
 
 export const {
   useGetAllBoardsQuery,
+  useCreateBoardMutation,
+  useDeleteBoardMutation,
   useGetColumnsFromBoardQuery,
   useGetTasksFromBoardQuery,
   useGetTasksFromColumnQuery,

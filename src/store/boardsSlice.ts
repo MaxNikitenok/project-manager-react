@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import { BoardsState } from './../types/types';
 import { createSlice } from '@reduxjs/toolkit';
 import { boardsApi } from '../services/boardsApi';
@@ -40,6 +39,18 @@ const boardsSlice = createSlice({
           localStorage.removeItem('token');
           resetUser()
         }
+      }
+    );
+    builder.addMatcher(
+      boardsApi.endpoints.createBoard.matchFulfilled,
+      (state, { payload }) => {
+        state.boards.push(payload);
+      }
+    );
+    builder.addMatcher(
+      boardsApi.endpoints.deleteBoard.matchFulfilled,
+      (state, { payload }) => {
+        state.boards = state.boards.filter((board) => board._id !== payload._id);
       }
     );
     builder.addMatcher(
