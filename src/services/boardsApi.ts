@@ -1,3 +1,4 @@
+import { IColumn } from './../types/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   BoardsResponse,
@@ -20,7 +21,7 @@ export const boardsApi = createApi({
       return headers;
     },
   }),
-  keepUnusedDataFor: 0,
+  keepUnusedDataFor: 60,
   endpoints: (build) => ({
     getAllBoards: build.query<BoardsResponse, void>({
       query: () => 'boards',
@@ -39,14 +40,43 @@ export const boardsApi = createApi({
         body,
       }),
     }),
+    updateBoard: build.mutation<IBoard, IBoard>({
+      query: (body) => ({
+        url: `boards/${body._id}`,
+        method: 'PUT',
+        body: {
+          title: body.title,
+          owner: body.owner,
+          users: body.users,
+        },
+      }),
+    }),
     deleteBoard: build.mutation<IBoard, string>({
       query: (boardId) => ({
         url: `boards/${boardId}`,
         method: 'DELETE',
       }),
     }),
+
     getColumnsFromBoard: build.query<ColumnsResponse, string | undefined>({
       query: (boardId) => `boards/${boardId}/columns`,
+    }),
+    createColumn: build.mutation<
+      IColumn,
+      {
+        title: string;
+        order: number;
+        boardId: string;
+      }
+    >({
+      query: (body) => ({
+        url: `boards/${body.boardId}/columns`,
+        method: 'POST',
+        body: {
+          title: body.title,
+          order: body.order,
+        },
+      }),
     }),
     getTasksFromBoard: build.query<TasksResponse, string | undefined>({
       query: (boardId) => `tasksSet/${boardId}`,
@@ -84,8 +114,10 @@ export const boardsApi = createApi({
 export const {
   useGetAllBoardsQuery,
   useCreateBoardMutation,
+  useUpdateBoardMutation,
   useDeleteBoardMutation,
   useGetColumnsFromBoardQuery,
+  useCreateColumnMutation,
   useGetTasksFromBoardQuery,
   useGetTasksFromColumnQuery,
   useUpdateColumnsSetMutation,
