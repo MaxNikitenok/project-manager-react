@@ -64,6 +64,19 @@ const boardsSlice = createSlice({
       }
     );
     builder.addMatcher(
+      boardsApi.endpoints.createColumn.matchFulfilled,
+      (state, { payload }) => {
+        state.columns.push({...payload, taskIds: []});
+      }
+    );
+    builder.addMatcher(
+      boardsApi.endpoints.deleteColumn.matchFulfilled,
+      (state, { payload }) => {
+        state.columnOrder = state.columnOrder.filter((item) => item !== payload._id);
+        state.columns = state.columns.filter((column) => column._id !== payload._id);
+      }
+    );
+    builder.addMatcher(
       boardsApi.endpoints.getTasksFromBoard.matchFulfilled,
       (state, { payload }) => {
         state.tasks = payload;

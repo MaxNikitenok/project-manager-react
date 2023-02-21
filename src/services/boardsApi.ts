@@ -66,7 +66,8 @@ export const boardsApi = createApi({
       {
         title: string;
         order: number;
-        boardId: string;
+        //Убрать undefined
+        boardId: string | undefined;
       }
     >({
       query: (body) => ({
@@ -88,7 +89,8 @@ export const boardsApi = createApi({
         },
       }),
     }),
-    deleteColumn: build.mutation<IBoard, {boardId: string; columnId: string}>({
+    //Убрать undefined
+    deleteColumn: build.mutation<IBoard, {boardId: string | undefined; columnId: string}>({
       query: (body) => ({
         url: `boards/${body.boardId}/columns/${body.columnId}`,
         method: 'DELETE',

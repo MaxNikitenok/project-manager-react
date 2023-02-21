@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './Board.module.css';
 import { Column } from './Column';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
-import { useGetColumnsFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
+import { useCreateColumnMutation, useGetColumnsFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
 import { columnOrderSelector, columnsFromBoardSelector, tasksFromBoardSelector } from '../../store/selectors';
 import { setColumns, setNewColumnsOrder, setTasks } from '../../store/boardsSlice';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { Dialog } from '@headlessui/react';
+import { motion } from 'framer-motion';
 
 const InnerList = (props: { boardId: string | undefined; column: any; taskMap: any; index: any }) => {
   const { boardId, column, taskMap, index } = props;
@@ -22,6 +24,7 @@ const InnerList = (props: { boardId: string | undefined; column: any; taskMap: a
 export const Board = () => {
 
   const {boardId} = useParams();
+  const userId = localStorage.getItem('userId');
 
   const columnOrder = useSelector(columnOrderSelector);
   const columns = useSelector(columnsFromBoardSelector);
@@ -29,9 +32,36 @@ export const Board = () => {
   const dispatch = useDispatch();
 
 const {refetch} = useGetColumnsFromBoardQuery(boardId);
+const [createColumn] = useCreateColumnMutation();
+
 
 const [updateColumns] = useUpdateColumnsSetMutation();
 const [updateTasks] = useUpdateTasksSetMutation()
+
+const [isOpen, setIsOpen] = useState(false);
+const [newColumnTitle, setNewColumnTitle] = useState('');
+
+const openModal = () => {
+  setIsOpen(true);
+};
+
+const onAddColumn = () => {
+  if (newColumnTitle && userId) {
+    //добавить приглашенных юзеров
+    createColumn({ title: newColumnTitle, order: 100, boardId: boardId });
+    alert('Request for the creation of the column sent');
+    setIsOpen(false);
+    setNewColumnTitle('');
+  } else if (!newColumnTitle) {
+    alert('Please enter the name of the column');
+  } else if (!userId) {
+    alert('что-то сломалось, ид юзера не обнаружен');
+  }
+};
+
+const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setNewColumnTitle(e.target.value);
+};
 
 const handleUpdateColumns = async (orderList: { _id: string; order: number; }[]) => {
     await updateColumns(orderList);   
@@ -42,16 +72,14 @@ const handleUpdateTasks = async (orderList: { _id: string; order: number; column
 }
 
 useEffect(() => {
-    
-
     refetch()
-    return () => {
-      dispatch(setColumns([]));
-      dispatch(setTasks([]));
-      dispatch(setNewColumnsOrder([]));
-    }
+    // return () => {
+    //   dispatch(setColumns([]));
+    //   dispatch(setTasks([]));
+    //   dispatch(setNewColumnsOrder([]));
+    // }
 
-}, [dispatch, refetch]);
+}, [dispatch, refetch, columns.length]);
 
   const onDragEnd = (result: DropResult) => {
 
@@ -183,6 +211,53 @@ useEffect(() => {
           )}
         </Droppable>
       </DragDropContext>
+      <div className={style.addColumn} onClick={openModal}>
+        +
+      </div>
+
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className={style.dialog}
+      >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.2,
+            delay: 0,
+          }}
+        >
+          <div className={style.dialogBackground} aria-hidden="true" />
+        </motion.div>
+        <div className={style.panelWrapper}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.4,
+              delay: 0.1,
+              ease: [0, 0.71, 0.2, 1.01],
+            }}
+          >
+            <Dialog.Panel className={style.dialogPanel}>
+              <Dialog.Title>Adding new column</Dialog.Title>
+              <div>
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    changeHandler(e);
+                  }}
+                />
+                <button onClick={() => onAddColumn()} disabled={!newColumnTitle}>
+                  add column
+                </button>
+              </div>
+              <button onClick={() => setIsOpen(false)}>Cancel</button>
+            </Dialog.Panel>
+          </motion.div>
+        </div>
+      </Dialog>
     </div>
   );
 };

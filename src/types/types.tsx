@@ -13,7 +13,6 @@ export interface BoardsState {
   columns: ColumnState[];
   tasks: ITask[];
   columnOrder: string[];
-
 }
 
 export interface IUser {
