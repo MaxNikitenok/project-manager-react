@@ -1,4 +1,4 @@
-import { IColumn } from './../types/types';
+import { IColumn, ITask } from './../types/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   BoardsResponse,
@@ -78,6 +78,23 @@ export const boardsApi = createApi({
         },
       }),
     }),
+    updateColumn: build.mutation<IColumn, IColumn>({
+      query: (body) => ({
+        url: `boards/${body.boardId}/columns/${body._id}`,
+        method: 'PUT',
+        body: {
+          title: body.title,
+          order: body.order,
+        },
+      }),
+    }),
+    deleteColumn: build.mutation<IBoard, {boardId: string; columnId: string}>({
+      query: (body) => ({
+        url: `boards/${body.boardId}/columns/${body.columnId}`,
+        method: 'DELETE',
+      }),
+    }),
+
     getTasksFromBoard: build.query<TasksResponse, string | undefined>({
       query: (boardId) => `tasksSet/${boardId}`,
     }),
@@ -88,6 +105,43 @@ export const boardsApi = createApi({
       query: ({ boardId, columnId }) =>
         `boards/${boardId}/columns/${columnId}/tasks`,
     }),
+    createTask: build.mutation<
+      ITask,
+      ITask
+    >({
+      query: (body) => ({
+        url: `boards/${body.boardId}/columns/${body.columnId}/tasks`,
+        method: 'POST',
+        body: {
+          title: body.title,
+          order: body.order,
+          description: body.description,
+          userId: body.userId,
+          users: body.users
+        },
+      }),
+    }),
+    updateTask: build.mutation<ITask, ITask>({
+      query: (body) => ({
+        url: `boards/${body.boardId}/columns/${body.columnId}/tasks/${body._id}`,
+        method: 'PUT',
+        body: {
+          title: body.title,
+          order: body.order,
+          description: body.description,
+          columnId: body.columnId,
+          userId: body.userId,
+          users: body.users
+        },
+      }),
+    }),
+    deleteTask: build.mutation<ITask, {boardId: string; columnId: string; taskId: string}>({
+      query: (body) => ({
+        url: `boards/${body.boardId}/columns/${body.columnId}/tasks/${body.taskId}`,
+        method: 'DELETE',
+      }),
+    }),
+    
     updateColumnsSet: build.mutation<
       ColumnsResponse,
       { _id: string; order: number }[]
@@ -116,10 +170,17 @@ export const {
   useCreateBoardMutation,
   useUpdateBoardMutation,
   useDeleteBoardMutation,
+
   useGetColumnsFromBoardQuery,
   useCreateColumnMutation,
+  useUpdateColumnsSetMutation,
+  useUpdateColumnMutation,
+  useDeleteColumnMutation,
+
   useGetTasksFromBoardQuery,
   useGetTasksFromColumnQuery,
-  useUpdateColumnsSetMutation,
+  useCreateTaskMutation,
+  useUpdateTaskMutation,
   useUpdateTasksSetMutation,
+  useDeleteTaskMutation
 } = boardsApi;

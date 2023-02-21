@@ -54,11 +54,13 @@
 }
 
 .dialogPanel {
+  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
   background-color: #ffffff;
   max-width: 24rem;
   border-radius: 0.25rem;
+  padding: 10px;
 }
 
 .dialogBackground {
