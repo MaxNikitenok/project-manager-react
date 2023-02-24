@@ -1,6 +1,19 @@
+.wrapper {
+  display: flex;
+}
+
 .container {
   margin-bottom: 8px;
   border: 1px solid darkgray;
   padding: 8px;
   border-radius: 8px;
+  width: 100%;
+}
+
+.deleteTask {
+  padding-left: 5px;
+}
+
+.deleteTask:hover {
+  cursor: pointer;
 }

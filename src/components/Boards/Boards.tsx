@@ -33,7 +33,6 @@ const Boards = () => {
     if (newBoardTitle && userId) {
       //добавить приглашенных юзеров
       createBoard({ title: newBoardTitle, owner: userId, users: [''] });
-      alert('Request for the creation of the board sent');
       setIsOpen(false);
       setNewBoardTitle('');
     } else if (!newBoardTitle) {

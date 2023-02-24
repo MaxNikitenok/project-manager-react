@@ -10,7 +10,8 @@ import {
 export const boardsApi = createApi({
   reducerPath: 'boardsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://backend-for-project-manager.up.railway.app/',
+    // baseUrl: 'https://backend-for-project-manager.up.railway.app/',
+    baseUrl: 'http://localhost:5000/',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
 
@@ -90,7 +91,10 @@ export const boardsApi = createApi({
       }),
     }),
     //Убрать undefined
-    deleteColumn: build.mutation<IBoard, {boardId: string | undefined; columnId: string}>({
+    deleteColumn: build.mutation<
+      IBoard,
+      { boardId: string | undefined; columnId: string }
+    >({
       query: (body) => ({
         url: `boards/${body.boardId}/columns/${body.columnId}`,
         method: 'DELETE',
@@ -107,10 +111,7 @@ export const boardsApi = createApi({
       query: ({ boardId, columnId }) =>
         `boards/${boardId}/columns/${columnId}/tasks`,
     }),
-    createTask: build.mutation<
-      ITask,
-      ITask
-    >({
+    createTask: build.mutation<ITask, ITask>({
       query: (body) => ({
         url: `boards/${body.boardId}/columns/${body.columnId}/tasks`,
         method: 'POST',
@@ -119,7 +120,7 @@ export const boardsApi = createApi({
           order: body.order,
           description: body.description,
           userId: body.userId,
-          users: body.users
+          users: body.users,
         },
       }),
     }),
@@ -133,17 +134,20 @@ export const boardsApi = createApi({
           description: body.description,
           columnId: body.columnId,
           userId: body.userId,
-          users: body.users
+          users: body.users,
         },
       }),
     }),
-    deleteTask: build.mutation<ITask, {boardId: string; columnId: string; taskId: string}>({
+    deleteTask: build.mutation<
+      ITask,
+      { boardId: string | undefined; columnId: string; taskId: string }
+    >({
       query: (body) => ({
         url: `boards/${body.boardId}/columns/${body.columnId}/tasks/${body.taskId}`,
         method: 'DELETE',
       }),
     }),
-    
+
     updateColumnsSet: build.mutation<
       ColumnsResponse,
       { _id: string; order: number }[]
@@ -184,5 +188,5 @@ export const {
   useCreateTaskMutation,
   useUpdateTaskMutation,
   useUpdateTasksSetMutation,
-  useDeleteTaskMutation
+  useDeleteTaskMutation,
 } = boardsApi;

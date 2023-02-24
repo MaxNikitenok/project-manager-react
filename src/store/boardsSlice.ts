@@ -37,7 +37,7 @@ const boardsSlice = createSlice({
         if (payload?.status === 403) {
           alert('token is dead');
           localStorage.removeItem('token');
-          resetUser()
+          resetUser();
         }
       }
     );
@@ -50,7 +50,9 @@ const boardsSlice = createSlice({
     builder.addMatcher(
       boardsApi.endpoints.deleteBoard.matchFulfilled,
       (state, { payload }) => {
-        state.boards = state.boards.filter((board) => board._id !== payload._id);
+        state.boards = state.boards.filter(
+          (board) => board._id !== payload._id
+        );
       }
     );
     builder.addMatcher(
@@ -66,14 +68,18 @@ const boardsSlice = createSlice({
     builder.addMatcher(
       boardsApi.endpoints.createColumn.matchFulfilled,
       (state, { payload }) => {
-        state.columns.push({...payload, taskIds: []});
+        state.columns.push({ ...payload, taskIds: [] });
       }
     );
     builder.addMatcher(
       boardsApi.endpoints.deleteColumn.matchFulfilled,
       (state, { payload }) => {
-        state.columnOrder = state.columnOrder.filter((item) => item !== payload._id);
-        state.columns = state.columns.filter((column) => column._id !== payload._id);
+        state.columnOrder = state.columnOrder.filter(
+          (item) => item !== payload._id
+        );
+        state.columns = state.columns.filter(
+          (column) => column._id !== payload._id
+        );
       }
     );
     builder.addMatcher(
@@ -81,11 +87,10 @@ const boardsSlice = createSlice({
       (state, { payload }) => {
         state.tasks = payload;
         state.columns.map((column) => {
-          return column.taskIds = state.tasks
+          return (column.taskIds = state.tasks
             .filter((task) => task.columnId === column._id)
             .sort((a, b) => a.order - b.order)
-            .map((task) => task._id);
-            
+            .map((task) => task._id));
         });
       }
     );
@@ -94,18 +99,21 @@ const boardsSlice = createSlice({
       (state, { payload }) => {
         state.tasks = [...state.tasks, ...payload];
         state.columns.map((column) => {
-          return column.taskIds = state.tasks
+          return (column.taskIds = state.tasks
             .filter((task) => task.columnId === column._id)
             .sort((a, b) => a.order - b.order)
-            .map((task) => task._id);
-            
+            .map((task) => task._id));
         });
       }
     );
     builder.addMatcher(
       boardsApi.endpoints.updateColumnsSet.matchFulfilled,
       (state, { payload }) => {
-        state.columns = payload.map((item) => ({ ...item, taskIds: state.columns.filter((column) => column._id === item._id)[0].taskIds }));
+        state.columns = payload.map((item) => ({
+          ...item,
+          taskIds: state.columns.filter((column) => column._id === item._id)[0]
+            .taskIds,
+        }));
         const order = Array.from(payload)
           .sort((a, b) => a.order - b.order)
           .map((column) => column._id);
@@ -113,17 +121,39 @@ const boardsSlice = createSlice({
       }
     );
     builder.addMatcher(
+      boardsApi.endpoints.createTask.matchFulfilled,
+      (state, { payload }) => {
+        state.tasks.push(payload);
+      }
+    );
+    builder.addMatcher(
       boardsApi.endpoints.updateTasksSet.matchFulfilled,
       (state, { payload }) => {
-        const arrIds = payload.map((task) => task._id)
-        state.tasks = [...(state.tasks.filter((task) => !arrIds.includes(task._id))), ...payload]
+        const arrIds = payload.map((task) => task._id);
+        state.tasks = [
+          ...state.tasks.filter((task) => !arrIds.includes(task._id)),
+          ...payload,
+        ];
 
         state.columns.map((column) => {
-          return column.taskIds = state.tasks
+          return (column.taskIds = state.tasks
             .filter((task) => task.columnId === column._id)
             .sort((a, b) => a.order - b.order)
-            .map((task) => task._id);
+            .map((task) => task._id));
         });
+      }
+    );
+    builder.addMatcher(
+      boardsApi.endpoints.deleteTask.matchFulfilled,
+      (state, { payload }) => {
+        const currentColumn = state.columns.filter((column) => column._id === payload.columnId)[0];
+        const restColumns = state.columns.filter((column) => column._id !== payload.columnId);      
+        const newTaskIds = currentColumn.taskIds.filter((id) => id !== payload._id);
+        
+        state.columns = [
+          ...restColumns, {...currentColumn, taskIds: newTaskIds}
+        ];
+        state.tasks = state.tasks.filter((task) => task._id !== payload._id);
       }
     );
   },

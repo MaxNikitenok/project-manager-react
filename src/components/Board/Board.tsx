@@ -6,7 +6,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useCreateColumnMutation, useGetColumnsFromBoardQuery, useUpdateColumnsSetMutation, useUpdateTasksSetMutation } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
 import { columnOrderSelector, columnsFromBoardSelector, tasksFromBoardSelector } from '../../store/selectors';
-import { setColumns, setNewColumnsOrder, setTasks } from '../../store/boardsSlice';
+import { setColumns, setNewColumnsOrder } from '../../store/boardsSlice';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Dialog } from '@headlessui/react';
@@ -49,7 +49,6 @@ const onAddColumn = () => {
   if (newColumnTitle && userId) {
     //добавить приглашенных юзеров
     createColumn({ title: newColumnTitle, order: 100, boardId: boardId });
-    alert('Request for the creation of the column sent');
     setIsOpen(false);
     setNewColumnTitle('');
   } else if (!newColumnTitle) {

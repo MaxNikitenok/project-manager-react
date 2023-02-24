@@ -49,10 +49,10 @@ export interface ITask {
   _id: string;
   title: string;
   order: number;
-  boardId: string;
+  boardId: string | undefined;
   columnId: string;
   description: string;
-  userId: number;
+  userId: string;
   users: string[];
 }
 
