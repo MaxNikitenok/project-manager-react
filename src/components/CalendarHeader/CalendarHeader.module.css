@@ -1,1 +1,4 @@
-.calendarHeader {}
+.calendarHeader {
+  background-color: #2a2b2d;
+  height: 36px;
+}

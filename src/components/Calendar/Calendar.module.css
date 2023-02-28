@@ -1,0 +1,11 @@
+.calendar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border-top: 1px solid #737374;
+  border-right: 1px solid #464648;
+  border-bottom: 1px solid #464648;
+  border-left: 1px solid #464648;
+  overflow: hidden;
+}

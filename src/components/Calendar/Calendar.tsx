@@ -8,12 +8,13 @@ import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 const Calendar = () => {
 
   moment.updateLocale('en', {week: {dow: 1}});
-  const startDay = moment().startOf('month').startOf('week');
+  const today = moment()
+  const startDay = today.clone().startOf('month').startOf('week');
   
   return (
     <div className={style.calendar}>
       <CalendarHeader />
-      <CalendarOptions />
+      <CalendarOptions today={today} />
       <CalendarGrid startDay={startDay} />      
     </div>
   );

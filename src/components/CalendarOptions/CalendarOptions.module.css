@@ -1,1 +1,40 @@
-.calendarOptions {}
+.calendarOptions {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1e1f21;
+  color: #dcdddd;
+  padding: 16px;
+}
+
+.month {
+  font-size: 32px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.year {
+  font-size: 32px;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.navButton {
+  border: unset;
+  background-color: #565759;
+  height: 28px;
+  margin-right: 2px;
+  border-radius: 4px;
+  color: #e6e6e6;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.navButton:nth-child(2) {
+  font-weight: 500;
+  padding-right: 16px;
+  padding-left: 16px;
+}

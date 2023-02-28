@@ -4,6 +4,8 @@
   grid-template-rows: repeat(6, 1fr);
   background-color: #404040;
   gap: 1px;
+  min-height: 40%;
+  flex-grow: 1;
 }
 
 .cellWrapper {

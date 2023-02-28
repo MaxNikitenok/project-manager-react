@@ -2,6 +2,7 @@
   background: #b3b3b370;
   padding: 5px;
   height: calc(100% - 10px);
+  position: relative;
 }
 
 .tasks {
