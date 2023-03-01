@@ -16,7 +16,7 @@ export const CalendarGrid = (props: { startDay: { clone: () => any } }) => {
               ? style.cellWeekEndWrapper
               : style.cellWrapper
           }
-          key={dayItem.format('DDMMYYYY')}
+          key={dayItem.unix()}
         >
           <div className={style.rowInCell}>
             <div
