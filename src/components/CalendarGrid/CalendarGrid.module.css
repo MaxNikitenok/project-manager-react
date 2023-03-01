@@ -33,4 +33,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  margin: 3px;
+}
+
+.currentDay {
+  height: 33px;
+  width: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin: 3px;
+  background-color: red;
 }

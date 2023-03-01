@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import style from './CalendarGrid.module.css';
 
@@ -18,7 +19,15 @@ export const CalendarGrid = (props: { startDay: { clone: () => any } }) => {
           key={dayItem.format('DDMMYYYY')}
         >
           <div className={style.rowInCell}>
-            <div className={style.dayWrapper}>{dayItem.format('D')}</div>
+            <div
+              className={
+                moment().isSame(dayItem, 'day')
+                  ? style.currentDay
+                  : style.dayWrapper
+              }
+            >
+              {dayItem.format('D')}
+            </div>
           </div>
         </div>
       ))}
