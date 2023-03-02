@@ -1,3 +1,21 @@
+.weekDaysWrapper  {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #404040;
+}
+
+.weekDay {
+  min-width: 140px;
+  min-height: 32px;
+  background-color: #1e1f21;
+  color: #dddcdd;
+  margin-bottom: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding-right: 3px;
+}
+
 .gridWrapper {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
