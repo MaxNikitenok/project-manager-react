@@ -20,7 +20,7 @@ const Calendar = () => {
     <div className={style.calendar}>
       <CalendarHeader />
       <CalendarOptions today={today} prevHandler={prevHandler} todayHandler={todayHandler} nextHandler={nextHandler} />
-      <CalendarGrid startDay={startDay} />      
+      <CalendarGrid startDay={startDay} today={today}/>      
     </div>
   );
 };

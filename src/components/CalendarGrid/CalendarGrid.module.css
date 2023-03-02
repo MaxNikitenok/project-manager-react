@@ -33,11 +33,25 @@
   color: #dddcdd;
 }
 
-.cellWeekEndWrapper {
+.weekendCellWrapper {
   min-width: 140px;
   min-height: 80px;
   background-color: #272829;
   color: #dddcdd;
+}
+
+.cellNotCurrentMonth {
+  min-width: 140px;
+  min-height: 80px;
+  background-color: #1e1f21;
+  color: #555759;
+}
+
+.weekendCellNotCurrentMonth {
+  min-width: 140px;
+  min-height: 80px;
+  background-color: #272829;
+  color: #555759;
 }
 
 .rowInCell {
