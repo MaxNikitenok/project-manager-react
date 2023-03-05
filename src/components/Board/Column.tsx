@@ -12,7 +12,7 @@ import { tasksFromBoardSelector } from '../../store/selectors';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { ITask } from '../../types/types';
-import { RxDotsHorizontal } from 'react-icons/rx';
+import { RxDotsHorizontal, RxPlus } from 'react-icons/rx';
 // import { IColumn, ITask } from '../../types/types';
 
 // const InnerList = (props) => {
@@ -116,7 +116,7 @@ export const Column = (props: {
                     />
                   ))}
                   {provided.placeholder}
-                  <button onClick={() => setIsOpen(true)}>add task</button>
+                  <button className={style.addTaskButton} onClick={() => setIsOpen(true)}><RxPlus/ > Add task</button>
                 </div>
               )}
             </Droppable>

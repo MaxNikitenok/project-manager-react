@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
+import { RxPlus } from 'react-icons/rx';
 
 const InnerList = (props: { boardId: string | undefined; column: any; taskMap: any; index: any }) => {
   const { boardId, column, taskMap, index } = props;
@@ -211,7 +212,7 @@ useEffect(() => {
         </Droppable>
       </DragDropContext>
       <div className={style.addColumn} onClick={openModal}>
-        +
+        <RxPlus />
       </div>
 
       <Dialog

@@ -14,17 +14,17 @@
 }
 
 .addColumn {
+  margin: 8px;
+  border-radius: 2px;
+  width: 220px;
   display: flex;
-  height: 100px;
-  width: 100px;
-  border: 1px solid black;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-}
-
-.addColumn:hover {
+  flex-direction: column;
   cursor: pointer;
+  border: 1px solid #777;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dialog {
