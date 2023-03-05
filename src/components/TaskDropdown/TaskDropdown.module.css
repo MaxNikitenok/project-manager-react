@@ -1,0 +1,54 @@
+.menu {
+  position: relative;
+}
+
+.menuButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: center;
+}
+
+.menuItems {
+  padding: 2px;
+  position: absolute;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  transform-origin: top right;
+  width: 14rem;
+  border-radius: 0.375rem;
+  border-top-width: 1px;
+  border-color: #f3f4f6;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  outline: none;
+}
+
+.activeItem {
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  align-items: center;
+  width: 100%;
+  border: none;
+  background-color: black;
+  color: #ffffff;
+}
+
+.notActiveItem {
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  align-items: center;
+  width: 100%;
+  border: none;
+}

@@ -8,11 +8,11 @@ import {
   useGetTasksFromBoardQuery,
 } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
-import {
-  tasksFromBoardSelector,
-} from '../../store/selectors';
+import { tasksFromBoardSelector } from '../../store/selectors';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
+import { ITask } from '../../types/types';
+import { RxDotsHorizontal } from 'react-icons/rx';
 // import { IColumn, ITask } from '../../types/types';
 
 // const InnerList = (props) => {
@@ -33,7 +33,7 @@ export const Column = (props: {
   boardId: string | undefined;
   column: { _id: string; title: string };
   index: number;
-  tasks: { _id: string; description: string }[];
+  tasks: ITask[];
 }) => {
   const tasks = useSelector(tasksFromBoardSelector);
   const { refetch } = useGetTasksFromBoardQuery(props.boardId);
@@ -43,6 +43,7 @@ export const Column = (props: {
 
   const [isOpen, setIsOpen] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskDescription, setNewTaskDescription] = useState('');
 
   const onAddTask = () => {
     if (newTaskTitle && userId) {
@@ -53,7 +54,7 @@ export const Column = (props: {
         order: 100,
         boardId: props.boardId,
         columnId: props.column._id,
-        description: 'description',
+        description: newTaskDescription,
         userId: userId,
         users: [''],
       });
@@ -66,8 +67,12 @@ export const Column = (props: {
     }
   };
 
-  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const titleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTaskTitle(e.target.value);
+  };
+
+  const descriptionHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTaskDescription(e.target.value);
   };
 
   useEffect(() => {
@@ -87,8 +92,12 @@ export const Column = (props: {
             {...provided.draggableProps}
             ref={provided.innerRef}
           >
-            <div className={style.title} {...provided.dragHandleProps}>
-              {props.column.title}
+            <div className={style.columnHeader} {...provided.dragHandleProps}>
+              <div>
+                <span className={style.title}>{props.column.title}</span>
+                <span className={style.tasksCounter}>{props.tasks.length}</span>
+              </div>
+              <RxDotsHorizontal />
             </div>
             <Droppable droppableId={props.column._id} type="task">
               {(provided) => (
@@ -97,14 +106,15 @@ export const Column = (props: {
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {props.tasks.map(
-                    (
-                      task: { _id: string; description: string },
-                      index: any
-                    ) => (
-                      <Task key={task._id} boardId={props.boardId} columnId={props.column._id} task={task} index={index} />
-                    )
-                  )}
+                  {props.tasks.map((task: ITask, index: any) => (
+                    <Task
+                      key={task._id}
+                      boardId={props.boardId}
+                      columnId={props.column._id}
+                      task={task}
+                      index={index}
+                    />
+                  ))}
                   {provided.placeholder}
                   <button onClick={() => setIsOpen(true)}>add task</button>
                 </div>
@@ -149,20 +159,30 @@ export const Column = (props: {
             <Dialog.Panel className={style.dialogPanel}>
               <Dialog.Title>Adding new task</Dialog.Title>
               <div>
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    changeHandler(e);
-                  }}
-                />
-                <button
-                  onClick={() => onAddTask()}
-                  disabled={!newTaskTitle}
-                >
+                <div>
+                  <div>Task name</div>
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      titleHandler(e);
+                    }}
+                  />
+                </div>
+                <div>
+                  <div>Task description</div>
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      descriptionHandler(e);
+                    }}
+                  />
+                </div>
+
+                <button onClick={() => onAddTask()} disabled={!newTaskTitle}>
                   add task
                 </button>
+                <button onClick={() => setIsOpen(false)}>Cancel</button>
               </div>
-              <button onClick={() => setIsOpen(false)}>Cancel</button>
             </Dialog.Panel>
           </motion.div>
         </div>

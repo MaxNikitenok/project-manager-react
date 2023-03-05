@@ -10,8 +10,8 @@ import {
 export const boardsApi = createApi({
   reducerPath: 'boardsApi',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'https://backend-for-project-manager.up.railway.app/',
-    baseUrl: 'http://localhost:5000/',
+    baseUrl: 'https://backend-for-project-manager-production.up.railway.app/',
+    // baseUrl: 'http://localhost:5000/',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
 

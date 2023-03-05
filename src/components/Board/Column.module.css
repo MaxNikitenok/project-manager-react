@@ -1,14 +1,30 @@
 .container {
   margin: 8px;
-  border: 1px solid darkgray;
   border-radius: 2px;
   width: 220px;
   display: flex;
   flex-direction: column;
 }
 
-.title {
+.columnHeader {
   padding: 8px;
+  border-bottom: solid 2px black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.tasksCounter {
+  border: 1px solid darkgray;
+  border-radius: 6px;
+  padding: 0px 4px;
+  margin-left: 10px;
 }
 
 .taskList{
