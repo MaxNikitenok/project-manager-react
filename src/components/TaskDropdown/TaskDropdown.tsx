@@ -1,10 +1,10 @@
 import React from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment } from 'react';
 import { RxDotsHorizontal } from 'react-icons/rx';
 import style from './TaskDropdown.module.css';
 
-export const TaskDropdown = () => {
+export const TaskDropdown = (props: { onDeleteTask: React.MouseEventHandler<HTMLButtonElement> }) => {
   return (
     <>
       <Menu>
@@ -38,6 +38,7 @@ export const TaskDropdown = () => {
                   {({ active }) => (
                     <button
                       className={ active ? style.activeItem : style.notActiveItem}
+                      onClick={props.onDeleteTask}
                     >
                       Delete
                     </button>
