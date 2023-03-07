@@ -13,6 +13,7 @@ import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { ITask } from '../../types/types';
 import { RxDotsHorizontal, RxPlus } from 'react-icons/rx';
+import { ColumnDropdown } from '../ColumnDropdown/ColumnDropdown';
 // import { IColumn, ITask } from '../../types/types';
 
 // const InnerList = (props) => {
@@ -79,8 +80,8 @@ export const Column = (props: {
     refetch();
   }, [tasks.length, refetch]);
 
-  const onDeleteColumn = (columnId: string) => {
-    deleteColumn({ boardId: props.boardId, columnId });
+  const onDeleteColumn = () => {
+    deleteColumn({ boardId: props.boardId, columnId: props.column._id });
   };
 
   return (
@@ -97,7 +98,7 @@ export const Column = (props: {
                 <span className={style.title}>{props.column.title}</span>
                 <span className={style.tasksCounter}>{props.tasks.length}</span>
               </div>
-              <RxDotsHorizontal />
+              <ColumnDropdown onDeleteColumn={onDeleteColumn} />
             </div>
             <Droppable droppableId={props.column._id} type="task">
               {(provided) => (
@@ -120,14 +121,6 @@ export const Column = (props: {
                 </div>
               )}
             </Droppable>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteColumn(props.column._id);
-              }}
-            >
-              delete
-            </button>
           </div>
         )}
       </Draggable>

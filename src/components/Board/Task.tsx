@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './Task.module.css';
 import { Draggable } from 'react-beautiful-dnd';
-import { useDeleteTaskMutation } from '../../services/boardsApi';
+import { useDeleteTaskMutation, useUpdateTaskMutation } from '../../services/boardsApi';
 import { ITask } from '../../types/types';
 import { TaskDropdown } from '../TaskDropdown/TaskDropdown';
 
@@ -12,12 +12,19 @@ export const Task = (props: {
   index: number;
 }) => {
   const [deleteTask] = useDeleteTaskMutation();
+  const [updateTask] = useUpdateTaskMutation();
 
   const onDeleteTask = () => {
     deleteTask({
       boardId: props.boardId,
       columnId: props.columnId,
       taskId: props.task._id,
+    });
+  };
+
+  const onUpdateTask = (newTitle: string, newDescription: string) => {
+    updateTask({
+     ...props.task, title: newTitle, description: newDescription
     });
   };
 
@@ -37,7 +44,7 @@ export const Task = (props: {
             </div>
             <div className={style.other}>
               <div>users</div>
-              <TaskDropdown onDeleteTask={onDeleteTask} />
+              <TaskDropdown onDeleteTask={onDeleteTask} onUpdateTask={onUpdateTask} />
             </div>
           </div>
         </div>

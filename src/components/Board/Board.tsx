@@ -212,7 +212,7 @@ useEffect(() => {
         </Droppable>
       </DragDropContext>
       <div className={style.addColumn} onClick={openModal}>
-        <RxPlus />
+        <RxPlus /> Add column
       </div>
 
       <Dialog

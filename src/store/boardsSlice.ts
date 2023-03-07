@@ -144,6 +144,13 @@ const boardsSlice = createSlice({
       }
     );
     builder.addMatcher(
+      boardsApi.endpoints.updateTask.matchFulfilled,
+      (state, { payload }) => {
+        const restTasks = state.tasks.filter((task) => task._id !== payload._id);
+        state.tasks = [...restTasks, payload];
+      }
+    );
+    builder.addMatcher(
       boardsApi.endpoints.deleteTask.matchFulfilled,
       (state, { payload }) => {
         const currentColumn = state.columns.filter((column) => column._id === payload.columnId)[0];
