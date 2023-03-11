@@ -12,7 +12,7 @@ import { tasksFromBoardSelector } from '../../store/selectors';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { ITask } from '../../types/types';
-import { RxDotsHorizontal, RxPlus } from 'react-icons/rx';
+import { RxPlus } from 'react-icons/rx';
 import { ColumnDropdown } from '../ColumnDropdown/ColumnDropdown';
 // import { IColumn, ITask } from '../../types/types';
 
@@ -43,12 +43,13 @@ export const Column = (props: {
   const [createTask] = useCreateTaskMutation();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [newTaskTitle, setNewTaskTitle] = useState(' ');
+  const [newTaskDescription, setNewTaskDescription] = useState(' ');
 
   const onAddTask = () => {
     if (newTaskTitle && userId) {
       //добавить приглашенных юзеров
+      
       createTask({
         _id: '',
         title: newTaskTitle,
@@ -60,7 +61,8 @@ export const Column = (props: {
         users: [''],
       });
       setIsOpen(false);
-      setNewTaskTitle('');
+      setNewTaskTitle(' ');
+      setNewTaskDescription(' ');
     } else if (!newTaskTitle) {
       alert('Please enter the name of the task');
     } else if (!userId) {

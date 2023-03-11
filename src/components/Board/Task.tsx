@@ -44,7 +44,7 @@ export const Task = (props: {
             </div>
             <div className={style.other}>
               <div>users</div>
-              <TaskDropdown onDeleteTask={onDeleteTask} onUpdateTask={onUpdateTask} />
+              <TaskDropdown onDeleteTask={onDeleteTask} onUpdateTask={onUpdateTask} taskTitle={props.task.title} taskDescription={props.task.description} />
             </div>
           </div>
         </div>

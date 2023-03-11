@@ -77,7 +77,7 @@ const boardsSlice = createSlice({
         state.columnOrder = state.columnOrder.filter(
           (item) => item !== payload._id
         );
-        state.columns = state.columns.filter(
+        state.columns.filter(
           (column) => column._id !== payload._id
         );
       }
@@ -160,7 +160,7 @@ const boardsSlice = createSlice({
         state.columns = [
           ...restColumns, {...currentColumn, taskIds: newTaskIds}
         ];
-        state.tasks = state.tasks.filter((task) => task._id !== payload._id);
+        state.tasks.filter((task) => task._id !== payload._id);
       }
     );
   },

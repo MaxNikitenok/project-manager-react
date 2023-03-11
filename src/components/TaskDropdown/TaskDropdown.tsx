@@ -5,11 +5,15 @@ import { RxDotsHorizontal } from 'react-icons/rx';
 import style from './TaskDropdown.module.css';
 import { motion } from 'framer-motion';
 
-export const TaskDropdown = (props: { onDeleteTask: React.MouseEventHandler<HTMLButtonElement>; onUpdateTask: ( newTitle: string, newDescription: string ) => void; }) => {
-
+export const TaskDropdown = (props: {
+  onDeleteTask: React.MouseEventHandler<HTMLButtonElement>;
+  onUpdateTask: (newTitle: string, newDescription: string) => void;
+  taskTitle: string;
+  taskDescription: string;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [newTitle, setNewTitle] = useState('');
-  const [newDescription, setNewDescription] = useState('');
+  const [newTitle, setNewTitle] = useState(props.taskTitle);
+  const [newDescription, setNewDescription] = useState(props.taskDescription);
 
   const titleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTitle(e.target.value);
@@ -22,7 +26,7 @@ export const TaskDropdown = (props: { onDeleteTask: React.MouseEventHandler<HTML
   const updateTaskHandler = () => {
     props.onUpdateTask(newTitle, newDescription);
     setIsOpen(false);
-  }
+  };
 
   return (
     <>
@@ -52,7 +56,7 @@ export const TaskDropdown = (props: { onDeleteTask: React.MouseEventHandler<HTML
                           className={
                             active ? style.activeItem : style.notActiveItem
                           }
-                          onClick={()=>setIsOpen(true)}
+                          onClick={() => setIsOpen(true)}
                         >
                           Edit
                         </button>
@@ -109,6 +113,7 @@ export const TaskDropdown = (props: { onDeleteTask: React.MouseEventHandler<HTML
                   <div>Task name</div>
                   <input
                     type="text"
+                    value={newTitle}
                     onChange={(e) => {
                       titleHandler(e);
                     }}
@@ -118,15 +123,14 @@ export const TaskDropdown = (props: { onDeleteTask: React.MouseEventHandler<HTML
                   <div>Task description</div>
                   <input
                     type="text"
+                    value={newDescription}
                     onChange={(e) => {
                       descriptionHandler(e);
                     }}
                   />
                 </div>
 
-                <button onClick={updateTaskHandler}>
-                  update task
-                </button>
+                <button onClick={updateTaskHandler}>update task</button>
                 <button onClick={() => setIsOpen(false)}>Cancel</button>
               </div>
             </Dialog.Panel>
