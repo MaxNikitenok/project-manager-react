@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from './Task.module.css';
 import { Draggable } from 'react-beautiful-dnd';
 import { useDeleteTaskMutation, useUpdateTaskMutation } from '../../services/boardsApi';

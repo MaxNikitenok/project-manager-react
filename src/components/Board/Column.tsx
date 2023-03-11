@@ -6,12 +6,13 @@ import {
   useCreateTaskMutation,
   useDeleteColumnMutation,
   useGetTasksFromBoardQuery,
+  useUpdateColumnMutation,
 } from '../../services/boardsApi';
 import { useSelector } from 'react-redux';
 import { tasksFromBoardSelector } from '../../store/selectors';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
-import { ITask } from '../../types/types';
+import { IColumn, ITask } from '../../types/types';
 import { RxPlus } from 'react-icons/rx';
 import { ColumnDropdown } from '../ColumnDropdown/ColumnDropdown';
 // import { IColumn, ITask } from '../../types/types';
@@ -32,13 +33,14 @@ import { ColumnDropdown } from '../ColumnDropdown/ColumnDropdown';
 
 export const Column = (props: {
   boardId: string | undefined;
-  column: { _id: string; title: string };
+  column: IColumn;
   index: number;
   tasks: ITask[];
 }) => {
   const tasks = useSelector(tasksFromBoardSelector);
   const { refetch } = useGetTasksFromBoardQuery(props.boardId);
   const [deleteColumn] = useDeleteColumnMutation();
+  const [updateColumn] = useUpdateColumnMutation();
   const userId = localStorage.getItem('userId');
   const [createTask] = useCreateTaskMutation();
 
@@ -82,6 +84,12 @@ export const Column = (props: {
     refetch();
   }, [tasks.length, refetch]);
 
+  const onUpdateColumn = (newTitle: string) => {
+    updateColumn({
+     ...props.column, title: newTitle
+    });
+  };
+
   const onDeleteColumn = () => {
     deleteColumn({ boardId: props.boardId, columnId: props.column._id });
   };
@@ -100,7 +108,7 @@ export const Column = (props: {
                 <span className={style.title}>{props.column.title}</span>
                 <span className={style.tasksCounter}>{props.tasks.length}</span>
               </div>
-              <ColumnDropdown onDeleteColumn={onDeleteColumn} />
+              <ColumnDropdown onDeleteColumn={onDeleteColumn}  onUpdateColumn={onUpdateColumn} columnTitle={props.column.title} />
             </div>
             <Droppable droppableId={props.column._id} type="task">
               {(provided) => (

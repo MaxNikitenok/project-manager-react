@@ -72,6 +72,15 @@ const boardsSlice = createSlice({
       }
     );
     builder.addMatcher(
+      boardsApi.endpoints.updateColumn.matchFulfilled,
+      (state, { payload }) => {
+        const restColumns = state.columns.filter((column) => column._id !== payload._id);
+        const currentColumn = state.columns.filter((column) => column._id === payload._id)[0];
+        currentColumn.title = payload.title;
+        state.columns = [...restColumns, currentColumn];
+      }
+    );
+    builder.addMatcher(
       boardsApi.endpoints.deleteColumn.matchFulfilled,
       (state, { payload }) => {
         state.columnOrder = state.columnOrder.filter(
