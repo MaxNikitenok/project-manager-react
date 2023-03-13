@@ -22,7 +22,7 @@ export const boardsApi = createApi({
       return headers;
     },
   }),
-  keepUnusedDataFor: 60,
+  keepUnusedDataFor: 0,
   endpoints: (build) => ({
     getAllBoards: build.query<BoardsResponse, void>({
       query: () => 'boards',
@@ -59,7 +59,7 @@ export const boardsApi = createApi({
       }),
     }),
 
-    getColumnsFromBoard: build.query<ColumnsResponse, string | undefined>({
+    getColumnsFromBoard: build.query<ColumnsResponse, string| undefined>({
       query: (boardId) => `boards/${boardId}/columns`,
     }),
     createColumn: build.mutation<

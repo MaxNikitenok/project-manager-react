@@ -59,16 +59,16 @@ const boardsSlice = createSlice({
       boardsApi.endpoints.getColumnsFromBoard.matchFulfilled,
       (state, { payload }) => {
         state.columns = payload.map((item) => ({ ...item, taskIds: [] }));
-        const order = Array.from(payload)
+        state.columnOrder = Array.from(payload)
           .sort((a, b) => a.order - b.order)
           .map((column) => column._id);
-        state.columnOrder = order;
       }
     );
     builder.addMatcher(
       boardsApi.endpoints.createColumn.matchFulfilled,
       (state, { payload }) => {
-        state.columns.push({ ...payload, taskIds: [] });
+        state.columns = [...state.columns, { ...payload, taskIds: [] }];
+        state.columnOrder = [...state.columnOrder, payload._id]
       }
     );
     builder.addMatcher(
@@ -86,7 +86,7 @@ const boardsSlice = createSlice({
         state.columnOrder = state.columnOrder.filter(
           (item) => item !== payload._id
         );
-        state.columns.filter(
+        state.columns = state.columns.filter(
           (column) => column._id !== payload._id
         );
       }
@@ -132,7 +132,14 @@ const boardsSlice = createSlice({
     builder.addMatcher(
       boardsApi.endpoints.createTask.matchFulfilled,
       (state, { payload }) => {
-        state.tasks.push(payload);
+        const currentColumn = state.columns.filter((column) => column._id === payload.columnId)[0];
+        const restColumns = state.columns.filter((column) => column._id !== payload.columnId);      
+        const newTaskIds = [...currentColumn.taskIds, payload._id];
+        
+        state.columns = [
+          ...restColumns, {...currentColumn, taskIds: newTaskIds}
+        ];
+        state.tasks = [...state.tasks, payload];
       }
     );
     builder.addMatcher(
@@ -169,7 +176,7 @@ const boardsSlice = createSlice({
         state.columns = [
           ...restColumns, {...currentColumn, taskIds: newTaskIds}
         ];
-        state.tasks.filter((task) => task._id !== payload._id);
+        state.tasks = state.tasks.filter((task) => task._id !== payload._id);
       }
     );
   },

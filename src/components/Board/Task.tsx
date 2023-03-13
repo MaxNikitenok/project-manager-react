@@ -4,6 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { useDeleteTaskMutation, useUpdateTaskMutation } from '../../services/boardsApi';
 import { ITask } from '../../types/types';
 import { TaskDropdown } from '../TaskDropdown/TaskDropdown';
+import { motion } from 'framer-motion';
 
 export const Task = (props: {
   boardId: string | undefined;
@@ -37,7 +38,12 @@ export const Task = (props: {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <div className={style.container}>
+          <motion.div className={style.container} initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.5,
+            delay: 0,
+          }}>
             <div className={style.contentWrapper}>
               <div className={style.title}>{props.task.title}</div>
               <div className={style.description}>{props.task.description}</div>
@@ -46,7 +52,7 @@ export const Task = (props: {
               <div>users</div>
               <TaskDropdown onDeleteTask={onDeleteTask} onUpdateTask={onUpdateTask} taskTitle={props.task.title} taskDescription={props.task.description} />
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </Draggable>

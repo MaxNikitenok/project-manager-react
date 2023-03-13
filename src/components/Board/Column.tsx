@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import style from './Column.module.css';
 import { Task } from './Task';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   useCreateTaskMutation,
   useDeleteColumnMutation,
-  useGetTasksFromBoardQuery,
   useUpdateColumnMutation,
 } from '../../services/boardsApi';
-import { useSelector } from 'react-redux';
-import { tasksFromBoardSelector } from '../../store/selectors';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { IColumn, ITask } from '../../types/types';
@@ -37,8 +34,7 @@ export const Column = (props: {
   index: number;
   tasks: ITask[];
 }) => {
-  const tasks = useSelector(tasksFromBoardSelector);
-  const { refetch } = useGetTasksFromBoardQuery(props.boardId);
+  // const { refetch } = useGetTasksFromBoardQuery(props.boardId);
   const [deleteColumn] = useDeleteColumnMutation();
   const [updateColumn] = useUpdateColumnMutation();
   const userId = localStorage.getItem('userId');
@@ -51,11 +47,11 @@ export const Column = (props: {
   const onAddTask = () => {
     if (newTaskTitle && userId) {
       //добавить приглашенных юзеров
-      
+
       createTask({
         _id: '',
         title: newTaskTitle,
-        order: 100,
+        order: props.tasks.length,
         boardId: props.boardId,
         columnId: props.column._id,
         description: newTaskDescription,
@@ -80,13 +76,14 @@ export const Column = (props: {
     setNewTaskDescription(e.target.value);
   };
 
-  useEffect(() => {
-    refetch();
-  }, [tasks.length, refetch]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [tasks.length, refetch]);
 
   const onUpdateColumn = (newTitle: string) => {
     updateColumn({
-     ...props.column, title: newTitle
+      ...props.column,
+      title: newTitle,
     });
   };
 
@@ -108,7 +105,11 @@ export const Column = (props: {
                 <span className={style.title}>{props.column.title}</span>
                 <span className={style.tasksCounter}>{props.tasks.length}</span>
               </div>
-              <ColumnDropdown onDeleteColumn={onDeleteColumn}  onUpdateColumn={onUpdateColumn} columnTitle={props.column.title} />
+              <ColumnDropdown
+                onDeleteColumn={onDeleteColumn}
+                onUpdateColumn={onUpdateColumn}
+                columnTitle={props.column.title}
+              />
             </div>
             <Droppable droppableId={props.column._id} type="task">
               {(provided) => (
@@ -127,13 +128,19 @@ export const Column = (props: {
                     />
                   ))}
                   {provided.placeholder}
-                  <button className={style.addTaskButton} onClick={() => setIsOpen(true)}><RxPlus/ > Add task</button>
+                  <button
+                    className={style.addTaskButton}
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <RxPlus /> Add task
+                  </button>
                 </div>
               )}
             </Droppable>
           </div>
         )}
       </Draggable>
+
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
