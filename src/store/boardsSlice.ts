@@ -94,19 +94,19 @@ const boardsSlice = createSlice({
     builder.addMatcher(
       boardsApi.endpoints.getTasksFromBoard.matchFulfilled,
       (state, { payload }) => {
-        state.tasks = payload;
         state.columns.map((column) => {
           return (column.taskIds = state.tasks
             .filter((task) => task.columnId === column._id)
             .sort((a, b) => a.order - b.order)
             .map((task) => task._id));
         });
+        state.tasks = payload;
       }
     );
     builder.addMatcher(
-      boardsApi.endpoints.getTasksFromColumn.matchFulfilled,
+      boardsApi.endpoints.getTasksFromBoard.matchFulfilled,
       (state, { payload }) => {
-        state.tasks = [...state.tasks, ...payload];
+        state.tasks = payload;
         state.columns.map((column) => {
           return (column.taskIds = state.tasks
             .filter((task) => task.columnId === column._id)

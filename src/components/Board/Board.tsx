@@ -6,7 +6,6 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import {
   useCreateColumnMutation,
   useGetColumnsFromBoardQuery,
-  useGetTasksFromBoardQuery,
   useUpdateColumnsSetMutation,
   useUpdateTasksSetMutation,
 } from '../../services/boardsApi';
@@ -23,22 +22,6 @@ import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { RxPlus } from 'react-icons/rx';
 
-const InnerList = (props: {
-  boardId: string | undefined;
-  column: any;
-  taskMap: any;
-  index: any;
-}) => {
-  const { boardId, column, taskMap, index } = props;
-  const tasks = column.taskIds.map(
-    (taskId: string) =>
-      taskMap.filter((item: { _id: string }) => item._id === taskId)[0]
-  );
-  return (
-    <Column boardId={boardId} column={column} tasks={tasks} index={index} />
-  );
-};
-
 export const Board = () => {
   const { boardId } = useParams();
   const userId = localStorage.getItem('userId');
@@ -48,9 +31,9 @@ export const Board = () => {
   const tasks = useSelector(tasksFromBoardSelector);
   const dispatch = useDispatch();
 
-  const { isLoading: isTaskLoading, isSuccess: isTaskSuccess } =
-    useGetTasksFromBoardQuery(boardId);
   const { isLoading, isSuccess } = useGetColumnsFromBoardQuery(boardId);
+  // const { isLoading: isTaskLoading, isSuccess: isTaskSuccess } =
+  //   useGetTasksFromBoardQuery(boardId);
   const [createColumn] = useCreateColumnMutation();
 
   const [updateColumns] = useUpdateColumnsSetMutation();
@@ -98,7 +81,7 @@ export const Board = () => {
   };
 
   // useEffect(() => {
-  //   refetch();
+    //   refetch();
   //   // return () => {
   //   //   dispatch(setColumns([]));
   //   //   dispatch(setTasks([]));
@@ -124,7 +107,7 @@ export const Board = () => {
       const newColumnOrder = Array.from(columnOrder);
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
-
+      
       const newOrderForColumns = Array.from(columns).map((column) => ({
         ...column,
         order: newColumnOrder.indexOf(column._id),
@@ -137,7 +120,7 @@ export const Board = () => {
         _id: column._id,
         order: newColumnOrder.indexOf(column._id),
       }));
-
+      
       handleUpdateColumns(newOrderList);
       return;
     }
@@ -153,7 +136,7 @@ export const Board = () => {
 
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
-
+      
       const newHome = {
         ...home,
         taskIds: newTaskIds,
@@ -197,7 +180,7 @@ export const Board = () => {
       .filter((item) => item._id !== newForeign._id);
 
     dispatch(setColumns([...restColumns, newHome, newForeign]));
-
+    
     const newOrderForHomeTasks = Array.from(tasks)
       .filter((task) => newHome.taskIds.includes(task._id))
       .map((task) => ({
@@ -218,11 +201,11 @@ export const Board = () => {
 
   return (
     <>
-      {(isLoading || isTaskLoading) && <div>Loading...</div>}
+      {(isLoading || isLoading) && <div>Loading...</div>}
 
-      {isSuccess && isTaskSuccess && (
+      {isSuccess && (
         <motion.div
-          className={style.board}
+        className={style.board}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
@@ -315,5 +298,21 @@ export const Board = () => {
         </motion.div>
       )}
     </>
+  );
+};
+
+const InnerList = (props: {
+  boardId: string | undefined;
+  column: any;
+  taskMap: any;
+  index: any;
+}) => {
+  const { boardId, column, taskMap, index } = props;
+  const tasks = column.taskIds.map(
+    (taskId: string) =>
+      taskMap.filter((item: { _id: string }) => item._id === taskId)[0]
+  );
+  return (
+    <Column boardId={boardId} column={column} tasks={tasks} index={index} />
   );
 };

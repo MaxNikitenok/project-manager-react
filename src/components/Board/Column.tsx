@@ -5,6 +5,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   useCreateTaskMutation,
   useDeleteColumnMutation,
+  useGetTasksFromBoardQuery,
   useUpdateColumnMutation,
 } from '../../services/boardsApi';
 import { Dialog } from '@headlessui/react';
@@ -34,7 +35,7 @@ export const Column = (props: {
   index: number;
   tasks: ITask[];
 }) => {
-  // const { refetch } = useGetTasksFromBoardQuery(props.boardId);
+  const { isSuccess } = useGetTasksFromBoardQuery(props.boardId);
   const [deleteColumn] = useDeleteColumnMutation();
   const [updateColumn] = useUpdateColumnMutation();
   const userId = localStorage.getItem('userId');
@@ -93,53 +94,83 @@ export const Column = (props: {
 
   return (
     <>
-      <Draggable draggableId={props.column._id} index={props.index}>
-        {(provided) => (
-          <div
-            className={style.container}
-            {...provided.draggableProps}
-            ref={provided.innerRef}
-          >
-            <div className={style.columnHeader} {...provided.dragHandleProps}>
-              <div>
-                <span className={style.title}>{props.column.title}</span>
-                <span className={style.tasksCounter}>{props.tasks.length}</span>
-              </div>
-              <ColumnDropdown
-                onDeleteColumn={onDeleteColumn}
-                onUpdateColumn={onUpdateColumn}
-                columnTitle={props.column.title}
-              />
-            </div>
-            <Droppable droppableId={props.column._id} type="task">
-              {(provided) => (
-                <div
-                  className={style.taskList}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {props.tasks.map((task: ITask, index: any) => (
-                    <Task
-                      key={task._id}
-                      boardId={props.boardId}
-                      columnId={props.column._id}
-                      task={task}
-                      index={index}
-                    />
-                  ))}
-                  {provided.placeholder}
-                  <button
-                    className={style.addTaskButton}
-                    onClick={() => setIsOpen(true)}
+      {isSuccess && (
+        <Draggable draggableId={props.column._id} index={props.index}>
+          {(provided) => (
+            <div
+              className={style.container}
+              {...provided.draggableProps}
+              ref={provided.innerRef}
+            >
+              <div className={style.columnHeader} {...provided.dragHandleProps}>
+                <div>
+                  <span className={style.title}>{props.column.title}</span>
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 1.5,
+                    }}
+                    className={style.tasksCounter}
                   >
-                    <RxPlus /> Add task
-                  </button>
+                    {props.tasks.length}
+                  </motion.span>
                 </div>
-              )}
-            </Droppable>
-          </div>
-        )}
-      </Draggable>
+                <ColumnDropdown
+                  onDeleteColumn={onDeleteColumn}
+                  onUpdateColumn={onUpdateColumn}
+                  columnTitle={props.column.title}
+                />
+              </div>
+              <Droppable droppableId={props.column._id} type="task">
+                {(provided) => (
+                  <div
+                    className={style.taskList}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {props.tasks.map((task: ITask, index: any) => (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                          duration: 1,
+                          delay: 0,
+                        }}
+                      >
+                        <Task
+                          key={task._id}
+                          boardId={props.boardId}
+                          columnId={props.column._id}
+                          task={task}
+                          index={index}
+                        />
+                      </motion.div>
+                    ))}
+                    {provided.placeholder}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 2,
+                      }}
+                    >
+                      <button
+                        className={style.addTaskButton}
+                        onClick={() => setIsOpen(true)}
+                      >
+                        <RxPlus /> Add task
+                      </button>
+                    </motion.div>
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          )}
+        </Draggable>
+      )}
 
       <Dialog
         open={isOpen}
