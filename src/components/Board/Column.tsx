@@ -105,17 +105,9 @@ export const Column = (props: {
               <div className={style.columnHeader} {...provided.dragHandleProps}>
                 <div>
                   <span className={style.title}>{props.column.title}</span>
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 1.5,
-                    }}
-                    className={style.tasksCounter}
-                  >
+                  <span className={style.tasksCounter}>
                     {props.tasks.length}
-                  </motion.span>
+                  </span>
                 </div>
                 <ColumnDropdown
                   onDeleteColumn={onDeleteColumn}
@@ -131,14 +123,7 @@ export const Column = (props: {
                     {...provided.droppableProps}
                   >
                     {props.tasks.map((task: ITask, index: any) => (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{
-                          duration: 1,
-                          delay: 0,
-                        }}
-                      >
+                      <div key={task._id}>
                         <Task
                           key={task._id}
                           boardId={props.boardId}
@@ -146,7 +131,7 @@ export const Column = (props: {
                           task={task}
                           index={index}
                         />
-                      </motion.div>
+                      </div>
                     ))}
                     {provided.placeholder}
                     <motion.div

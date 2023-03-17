@@ -7,15 +7,18 @@ import {
   useCreateBoardMutation,
   useDeleteBoardMutation,
   useGetAllBoardsQuery,
+  useUpdateBoardMutation,
 } from '../../services/boardsApi';
 import { boardsSelector } from '../../store/selectors';
 import { IBoard } from '../../types/types';
+import { BoardDropdown } from '../BoardDropdown/BoardDropdown';
 import style from './Boards.module.css';
 
 const Boards = () => {
   const navigate = useNavigate();
   const { data: boards, refetch } = useGetAllBoardsQuery();
   const [createBoard] = useCreateBoardMutation();
+  const [updateBoard] = useUpdateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
 
   const boardsState = useSelector(boardsSelector);
@@ -42,6 +45,13 @@ const Boards = () => {
     }
   };
 
+  const onUpdateBoard = (board: IBoard, newTitle: string) => {
+    updateBoard({
+      ...board,
+      title: newTitle,
+    });
+  };
+
   const onDeleteBoard = (id: string) => {
     deleteBoard(id);
   };
@@ -55,30 +65,44 @@ const Boards = () => {
   }, [boardsState.length, refetch]);
 
   return (
-    <div className={style.boards}>
-      {boards?.map((board: IBoard) => {
-        return (
-          <div
-            className={style.boardItem}
-            onClick={() => {
-              navigate(`/boards/${board._id}`);
-            }}
-            key={board._id}
-          >
-            <div>{board.title}</div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteBoard(board._id);
+    <>
+      <div className={style.boards}>
+        {boards?.map((board: IBoard) => {
+          return (
+            <div
+              className={style.boardItem}
+              onClick={() => {
+                navigate(`/boards/${board._id}`);
               }}
+              key={board._id}
             >
-              delete
-            </button>
-          </div>
-        );
-      })}
-      <div className={style.addBoard} onClick={openModal}>
-        +
+              <div className={style.boardHeader}>
+                <span className={style.title}>{board.title}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <BoardDropdown
+                    onDeleteBoard={onDeleteBoard}
+                    onUpdateBoard={onUpdateBoard}
+                    board={board}
+                  />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        <motion.div className={style.addBoard} onClick={openModal}
+        initial={{ opacity: 0, scaleX: 0, x: -100}}
+        animate={{ opacity: 1, scaleX: 1, x: 0 }}
+        transition={{
+          duration: 0.5,
+          delay: 0.5,
+        }}
+        >
+          <span>+ Add board</span>
+        </motion.div>
       </div>
 
       <Dialog
@@ -124,7 +148,7 @@ const Boards = () => {
           </motion.div>
         </div>
       </Dialog>
-    </div>
+    </>
   );
 };
 

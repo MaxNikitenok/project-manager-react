@@ -1,0 +1,92 @@
+.menu {
+  position: relative;
+}
+
+.menuButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: center;
+}
+
+.menuItems {
+  padding: 2px;
+  position: absolute;
+  right: -100px;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  width: 14rem;
+  border-radius: 3px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  outline: none;
+}
+
+.activeItem {
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  align-items: center;
+  width: 100%;
+  border: none;
+  background-color: black;
+  color: #ffffff;
+}
+
+.notActiveItem {
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  align-items: center;
+  width: 100%;
+  border: none;
+  background-color: #fff;
+}
+
+.dialog {
+  position: relative;
+  z-index: 50;
+}
+
+.panelWrapper {
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialogPanel {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffffff;
+  max-width: 24rem;
+  border-radius: 0.25rem;
+  padding: 10px;
+}
+
+.dialogBackground {
+  position: fixed;
+  background: rgba(1, 1, 1, 0.459);
+  /* backdrop-filter: blur(1px); */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+
+

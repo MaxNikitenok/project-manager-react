@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './Board.module.css';
 import { Column } from './Column';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
@@ -13,11 +13,13 @@ import { useSelector } from 'react-redux';
 import {
   columnOrderSelector,
   columnsFromBoardSelector,
+  isAuthorizedSelector,
   tasksFromBoardSelector,
 } from '../../store/selectors';
 import { setColumns, setNewColumnsOrder } from '../../store/boardsSlice';
+import { resetUser } from '../../store/userSlice';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Dialog } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { RxPlus } from 'react-icons/rx';
@@ -41,6 +43,9 @@ export const Board = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState('');
+
+  const navigate = useNavigate();
+  const authorized = useSelector(isAuthorizedSelector);
 
   const openModal = () => {
     setIsOpen(true);
@@ -81,13 +86,21 @@ export const Board = () => {
   };
 
   // useEffect(() => {
-    //   refetch();
+  //   refetch();
   //   // return () => {
   //   //   dispatch(setColumns([]));
   //   //   dispatch(setTasks([]));
   //   //   dispatch(setNewColumnsOrder([]));
   //   // }
   // }, [refetch, columns.length]);
+
+  useEffect(() => {
+    if (authorized === false) {
+      dispatch(resetUser());
+      navigate(`/signIn`);
+      console.log(11111111);
+    }
+  }, [authorized, dispatch, navigate]);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
@@ -107,7 +120,7 @@ export const Board = () => {
       const newColumnOrder = Array.from(columnOrder);
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
-      
+
       const newOrderForColumns = Array.from(columns).map((column) => ({
         ...column,
         order: newColumnOrder.indexOf(column._id),
@@ -120,7 +133,7 @@ export const Board = () => {
         _id: column._id,
         order: newColumnOrder.indexOf(column._id),
       }));
-      
+
       handleUpdateColumns(newOrderList);
       return;
     }
@@ -136,7 +149,7 @@ export const Board = () => {
 
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
-      
+
       const newHome = {
         ...home,
         taskIds: newTaskIds,
@@ -180,7 +193,7 @@ export const Board = () => {
       .filter((item) => item._id !== newForeign._id);
 
     dispatch(setColumns([...restColumns, newHome, newForeign]));
-    
+
     const newOrderForHomeTasks = Array.from(tasks)
       .filter((task) => newHome.taskIds.includes(task._id))
       .map((task) => ({
@@ -204,15 +217,7 @@ export const Board = () => {
       {(isLoading || isLoading) && <div>Loading...</div>}
 
       {isSuccess && (
-        <motion.div
-        className={style.board}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.5,
-            delay: 0,
-          }}
-        >
+        <div className={style.board}>
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable
               droppableId="allColumns"
@@ -245,9 +250,18 @@ export const Board = () => {
               )}
             </Droppable>
           </DragDropContext>
-          <div className={style.addColumn} onClick={openModal}>
+          <motion.div
+            className={style.addColumn}
+            onClick={openModal}
+            initial={{ opacity: 0, scaleX: 0, x: -100 }}
+            animate={{ opacity: 1, scaleX: 1, x: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 1.5,
+            }}
+          >
             <RxPlus /> Add column
-          </div>
+          </motion.div>
 
           <Dialog
             open={isOpen}
@@ -295,7 +309,7 @@ export const Board = () => {
               </motion.div>
             </div>
           </Dialog>
-        </motion.div>
+        </div>
       )}
     </>
   );
@@ -313,6 +327,15 @@ const InnerList = (props: {
       taskMap.filter((item: { _id: string }) => item._id === taskId)[0]
   );
   return (
-    <Column boardId={boardId} column={column} tasks={tasks} index={index} />
+    <motion.div
+      initial={{ opacity: 0, scaleY: 0, y: -300 }}
+      animate={{ opacity: 1, scaleY: 1, y: 0 }}
+      transition={{
+        duration: 0.5,
+        delay: 1,
+      }}
+    >
+      <Column boardId={boardId} column={column} tasks={tasks} index={index} />
+    </motion.div>
   );
 };

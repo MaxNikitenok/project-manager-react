@@ -18,7 +18,7 @@ const Header = () => {
     if (!authorized) {
       navigate('/');
     }
-  }, [authorized]);
+  }, [authorized, navigate]);
 
   return (
     <div className={style.Header}>
