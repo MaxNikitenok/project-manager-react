@@ -24,7 +24,7 @@ const CentralPanel = () => {
         <Route path="/boards" element={<Boards />} />
         <Route path="/boards/:boardId" element={<Board />} />
         <Route path="/calendar" element={<Calendar />} />
-        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>

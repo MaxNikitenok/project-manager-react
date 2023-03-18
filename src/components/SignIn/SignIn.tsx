@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setUserLogin } from '../../store/userSlice';
 import { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { RxLockClosed, RxPerson } from 'react-icons/rx';
+import { RxCross1, RxLockClosed, RxPerson } from 'react-icons/rx';
 
 interface IFormInput {
   login: string;
@@ -25,8 +25,11 @@ export const SignIn = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<IFormInput>();
+  } = useForm<IFormInput>({
+    mode: "onChange",
+  });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     await signIn(data);
@@ -37,6 +40,13 @@ export const SignIn = () => {
     navigate(`/`);
   };
 
+  const registerPage = () => {
+    navigate(`/signup`);
+  };
+
+  const login = watch('login');
+  const password = watch('password');
+
   useEffect(() => {
     if (authorized === true) {
       navigate(`/`);
@@ -46,33 +56,39 @@ export const SignIn = () => {
   return (
     <div className={style.formScreen}>
       <div className={style.formWrapper}>
+        <div className={style.closeButton} onClick={()=>{close()}}><RxCross1 /></div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={style.inputBox}>
-            <RxPerson />
+          <h2>Login</h2>
+          <div className={style.inputWrapper}>
+            <RxPerson className={style.inputIcon} />
             <input
               {...register('login', {
                 required: 'This is required',
                 minLength: { value: 3, message: 'Min length is 3' },
               })}
-              />
-              <label>Login</label>
-            <p>{errors.login?.message}</p>
+              autoComplete='off'
+            />
+            <label className={login ? style.activeLabel : style.label}>Login</label>
+            <p className={style.errors}>{errors.login?.message}</p>
           </div>
-          <div className={style.inputBox}>
-            <RxLockClosed />
+          <div className={style.inputWrapper}>
+            <RxLockClosed className={style.inputIcon} />
             <input
               {...register('password', {
                 required: 'This is required',
                 minLength: { value: 3, message: 'Min length is 3' },
               })}
-              />
-              <label>Password</label>
-            <p>{errors.password?.message}</p>
+              autoComplete='off'
+            />
+            <label className={password ? style.activeLabel : style.label}>Password</label>
+            <p className={style.errors}>{errors.password?.message}</p>
           </div>
 
-          <input type="submit" value="ENTER" />
+          <input className={style.submitButton} type="submit" value="ENTER" />
           <div className={style.register}>
-              <p>Do not have an account? <span><b>Register</b></span></p>
+            <p>
+              Do not have an account? <span onClick={()=>{registerPage()}}>Register</span>
+            </p>
           </div>
         </form>
       </div>

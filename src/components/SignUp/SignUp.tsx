@@ -17,14 +17,14 @@ function SignUp() {
     navigate(`/`);
   };
 
-  useEffect(
-    () => {
-      if (isRegistration === true) {
-        navigate(`/signin`);
-      }
-    },
-    [isRegistration]
-  );
+  // useEffect(
+  //   () => {
+  //     if (isRegistration === true) {
+  //       navigate(`/signin`);
+  //     }
+  //   },
+  //   [isRegistration]
+  // );
 
   const U = async () => {
     await signUp({

@@ -14,11 +14,11 @@ const Header = () => {
 
   const authorized = useSelector(isAuthorizedSelector);
 
-  useEffect(() => {
-    if (!authorized) {
-      navigate('/signIn');
-    }
-  }, [authorized, navigate]);
+  // useEffect(() => {
+  //   if (!authorized) {
+  //     navigate('/signIn');
+  //   }
+  // }, [authorized, navigate]);
 
   return (
     <div className={style.Header}>
