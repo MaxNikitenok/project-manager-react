@@ -107,10 +107,10 @@ export const BoardDropdown = ( props: {
             }}
           >
             <Dialog.Panel className={style.dialogPanel}>
-              <Dialog.Title>Adding new task</Dialog.Title>
+              <Dialog.Title>Renaming board</Dialog.Title>
               <div>
                 <div>
-                  <div>Task name</div>
+                  <div>Board name</div>
                   <input
                     type="text"
                     value={newTitle}
@@ -119,7 +119,7 @@ export const BoardDropdown = ( props: {
                     }}
                   />
                 </div>
-                <button onClick={updateBoardHandler}>update task</button>
+                <button onClick={updateBoardHandler}>update board title</button>
                 <button onClick={() => setIsOpen(false)}>Cancel</button>
               </div>
             </Dialog.Panel>

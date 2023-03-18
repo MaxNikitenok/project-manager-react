@@ -1,17 +1,9 @@
-.bg {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+
+
+.formScreen {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff;
-}
+  min-height: 100vh;
 
-.popup {
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
 }

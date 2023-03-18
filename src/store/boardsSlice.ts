@@ -48,6 +48,20 @@ const boardsSlice = createSlice({
       }
     );
     builder.addMatcher(
+      boardsApi.endpoints.updateBoard.matchFulfilled,
+      (state, { payload }) => {
+        const newBoards = state.boards.map((board) => {
+          if (board._id === payload._id) {
+            return payload
+          };
+          return board;
+        })
+        state.boards = newBoards;
+        
+        
+      }
+    );
+    builder.addMatcher(
       boardsApi.endpoints.deleteBoard.matchFulfilled,
       (state, { payload }) => {
         state.boards = state.boards.filter(

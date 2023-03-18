@@ -16,12 +16,12 @@ import style from './Boards.module.css';
 
 const Boards = () => {
   const navigate = useNavigate();
-  const { data: boards, refetch } = useGetAllBoardsQuery();
+  const { refetch } = useGetAllBoardsQuery();
   const [createBoard] = useCreateBoardMutation();
   const [updateBoard] = useUpdateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
 
-  const boardsState = useSelector(boardsSelector);
+  const boards = useSelector(boardsSelector);
 
   const [isOpen, setIsOpen] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState('');
@@ -62,12 +62,12 @@ const Boards = () => {
 
   useEffect(() => {
     refetch();
-  }, [boardsState.length, refetch]);
+  }, [boards.length, refetch]);
 
   return (
     <>
       <div className={style.boards}>
-        {boards?.map((board: IBoard) => {
+        {boards.map((board: IBoard) => {
           return (
             <div
               className={style.boardItem}
@@ -78,7 +78,7 @@ const Boards = () => {
             >
               <div className={style.boardHeader}>
                 <span className={style.title}>{board.title}</span>
-                <button
+                <div
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
@@ -88,7 +88,7 @@ const Boards = () => {
                     onUpdateBoard={onUpdateBoard}
                     board={board}
                   />
-                </button>
+                </div>
               </div>
             </div>
           );

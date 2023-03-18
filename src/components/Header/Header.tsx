@@ -16,7 +16,7 @@ const Header = () => {
 
   useEffect(() => {
     if (!authorized) {
-      navigate('/');
+      navigate('/signIn');
     }
   }, [authorized, navigate]);
 

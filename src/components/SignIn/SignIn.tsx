@@ -6,61 +6,76 @@ import { useSelector } from 'react-redux';
 import { isAuthorizedSelector } from '../../store/selectors';
 import { useDispatch } from 'react-redux';
 import { setUserLogin } from '../../store/userSlice';
+import { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { RxLockClosed, RxPerson } from 'react-icons/rx';
 
-function SignIn() {
+interface IFormInput {
+  login: string;
+  password: string;
+}
+
+export const SignIn = () => {
   const navigate = useNavigate();
   const authorized = useSelector(isAuthorizedSelector);
   const dispatch = useDispatch();
 
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
   const [signIn] = useSignInMutation();
 
-  const I = async () => {
-    await signIn({
-      login: login,
-      password: password,
-    });
-    dispatch(setUserLogin(login))
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    await signIn(data);
+    dispatch(setUserLogin(data.login));
   };
 
   const close = () => {
     navigate(`/`);
   };
 
-  useEffect(
-    () => {
-      if (authorized === true) {
-        navigate(`/`);
-      }
-    },
-    [authorized, navigate],
-  );  
+  useEffect(() => {
+    if (authorized === true) {
+      navigate(`/`);
+    }
+  }, [authorized, navigate]);
 
   return (
-    <div className={style.dialogExample}>
-      <div className={style.bg}>
-        <div className={style.popup}>
-          <div className={style.signIn}>
-            <div>Login</div>
+    <div className={style.formScreen}>
+      <div className={style.formWrapper}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={style.inputBox}>
+            <RxPerson />
             <input
-              type="text"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-            />
-            <div>Password</div>
-            <input
-              type="text"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={I}>SIGN IN</button>
+              {...register('login', {
+                required: 'This is required',
+                minLength: { value: 3, message: 'Min length is 3' },
+              })}
+              />
+              <label>Login</label>
+            <p>{errors.login?.message}</p>
           </div>
-          <button onClick={close}>Close</button>
-        </div>
+          <div className={style.inputBox}>
+            <RxLockClosed />
+            <input
+              {...register('password', {
+                required: 'This is required',
+                minLength: { value: 3, message: 'Min length is 3' },
+              })}
+              />
+              <label>Password</label>
+            <p>{errors.password?.message}</p>
+          </div>
+
+          <input type="submit" value="ENTER" />
+          <div className={style.register}>
+              <p>Do not have an account? <span><b>Register</b></span></p>
+          </div>
+        </form>
       </div>
     </div>
   );
-}
-
-export default SignIn;
+};
