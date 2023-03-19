@@ -1,3 +1,4 @@
+import { IRegisterFormInput, IUser } from './../types/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { UsersResponse } from '../types/types';
 
@@ -17,7 +18,7 @@ export const userApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    signUp: build.mutation({
+    signUp: build.mutation<IUser, IRegisterFormInput>({
       query: (body) => ({
         url: 'auth/signup',
         method: 'POST',

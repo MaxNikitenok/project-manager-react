@@ -57,3 +57,9 @@ export interface ITask {
 }
 
 export type TasksResponse = ITask[];
+
+export interface IRegisterFormInput {
+  name: string;
+  login: string;
+  password: string;
+}

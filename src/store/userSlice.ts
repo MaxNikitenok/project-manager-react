@@ -21,12 +21,16 @@ const userSlice = createSlice({
       localStorage.removeItem('token');
       state.isAuthorized = !!localStorage.getItem('token');
     },
+    resetIsRegistrationSuccessfully: (state) => {
+      state.isRegistrationSuccessfully = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
       userApi.endpoints.signUp.matchFulfilled,
       (state, { payload }) => {
         state.isRegistrationSuccessfully = true;
+        alert(`Пользователь с именем ${payload.name} зарегистрирован.`)
       }
     );
     builder.addMatcher(
@@ -51,4 +55,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { setUserLogin, resetUser } = userSlice.actions;
+export const { setUserLogin, resetUser, resetIsRegistrationSuccessfully } = userSlice.actions;

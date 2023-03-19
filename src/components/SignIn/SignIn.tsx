@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import style from './SignIn.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../../services/userApi';
 import { useSelector } from 'react-redux';
-import { isAuthorizedSelector } from '../../store/selectors';
+import { isAuthorizedSelector, isRegistrationSuccessfullySelector } from '../../store/selectors';
 import { useDispatch } from 'react-redux';
-import { setUserLogin } from '../../store/userSlice';
-import { SubmitHandler } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import { resetIsRegistrationSuccessfully, setUserLogin } from '../../store/userSlice';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { RxCross1, RxLockClosed, RxPerson } from 'react-icons/rx';
 
 interface IFormInput {
@@ -19,6 +18,8 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const authorized = useSelector(isAuthorizedSelector);
   const dispatch = useDispatch();
+  const isRegistration = useSelector(isRegistrationSuccessfullySelector);
+
 
   const [signIn] = useSignInMutation();
 
@@ -51,7 +52,10 @@ export const SignIn = () => {
     if (authorized === true) {
       navigate(`/`);
     }
-  }, [authorized, navigate]);
+    if (isRegistration === true) {
+      dispatch(resetIsRegistrationSuccessfully());
+    }
+  }, [authorized, dispatch, isRegistration, navigate]);
 
   return (
     <div className={style.formScreen}>
@@ -87,7 +91,7 @@ export const SignIn = () => {
           <input className={style.submitButton} type="submit" value="ENTER" />
           <div className={style.register}>
             <p>
-              Do not have an account? <span onClick={()=>{registerPage()}}>Register</span>
+              Do not have an account?  <span onClick={()=>{registerPage()}}>Register</span>
             </p>
           </div>
         </form>
