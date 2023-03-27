@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import style from './SignUp.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSignUpMutation } from '../../services/userApi';
 import { useSelector } from 'react-redux';
 import { isRegistrationSuccessfullySelector } from '../../store/selectors';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RxCross1, RxLockClosed, RxPerson } from 'react-icons/rx';
+import { RxCross1, RxEyeOpen, RxEyeNone, RxPerson } from 'react-icons/rx';
 import { IRegisterFormInput } from '../../types/types';
 
 function SignUp() {
   const navigate = useNavigate();
   const [signUp] = useSignUpMutation();
   const isRegistration = useSelector(isRegistrationSuccessfullySelector);
+
+  const [isPasswordHidden, setPasswordHidden] = useState(true);
 
   const {
     register,
@@ -78,13 +80,20 @@ function SignUp() {
             <p className={style.errors}>{errors.login?.message}</p>
           </div>
           <div className={style.inputWrapper}>
-            <RxLockClosed className={style.inputIcon} />
+          <div onClick={() => setPasswordHidden(!isPasswordHidden)}>
+              {isPasswordHidden ? (
+                <RxEyeNone className={style.inputIcon} />
+              ) : (
+                <RxEyeOpen className={style.inputIcon} />
+              )}
+            </div>
             <input
               {...register('password', {
                 required: 'This is required',
                 minLength: { value: 3, message: 'Min length is 3' },
               })}
               autoComplete='off'
+              type={isPasswordHidden ? 'password' : 'text'}
             />
             <label className={password ? style.activeLabel : style.label}>Password</label>
             <p className={style.errors}>{errors.password?.message}</p>

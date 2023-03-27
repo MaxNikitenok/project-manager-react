@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: center;
 
-  background: url(../../../public/pictures/pexels-madison-inouye.jpg);
+  background: url(../../../public/pictures/space__ultrarealistic.png);
   background-position: center;
   background-size: cover;
 }
@@ -20,7 +20,7 @@
   background: transparent;
   border: 2px solid rgba(255,255,255,0.5);
   border-radius: 20px;
-  backdrop-filter: blur(7px);
+  backdrop-filter: blur(16px);
   display: flex;
   justify-content: center;
   align-items: center;
