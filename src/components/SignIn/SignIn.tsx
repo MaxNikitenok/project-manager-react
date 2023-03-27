@@ -14,6 +14,7 @@ import {
 } from '../../store/userSlice';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RxCross1, RxEyeOpen, RxEyeNone, RxPerson } from 'react-icons/rx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface IFormInput {
   login: string;
@@ -27,6 +28,8 @@ export const SignIn = () => {
   const isRegistration = useSelector(isRegistrationSuccessfullySelector);
 
   const [signIn] = useSignInMutation();
+
+  const [isVisible, setVisible] = useState(true);
 
   const [isPasswordHidden, setPasswordHidden] = useState(true);
 
@@ -48,8 +51,11 @@ export const SignIn = () => {
     navigate(`/`);
   };
 
+  const moveToRegisterPage = () => navigate(`/signup`)
+
   const registerPage = () => {
-    navigate(`/signup`);
+    setVisible(false);
+    setTimeout(moveToRegisterPage, 300);
   };
 
   const login = watch('login');
@@ -66,68 +72,78 @@ export const SignIn = () => {
 
   return (
     <div className={style.formScreen}>
-      <div className={style.formWrapper}>
-        <div
-          className={style.closeButton}
-          onClick={() => {
-            close();
+      <AnimatePresence>
+        {isVisible && (<motion.div
+          className={style.formWrapper}
+          initial={{ opacity: 0, x: 1000 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 1000 }}
+          transition={{
+            duration: 0.3,
           }}
         >
-          <RxCross1 />
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>Login</h2>
-          <div className={style.inputWrapper}>
-            <RxPerson className={style.inputIcon} />
-            <input
-              {...register('login', {
-                required: 'This is required',
-                minLength: { value: 3, message: 'Min length is 3' },
-              })}
-              autoComplete="off"
-            />
-            <label className={login ? style.activeLabel : style.label}>
-              Login
-            </label>
-            <p className={style.errors}>{errors.login?.message}</p>
+          <div
+            className={style.closeButton}
+            onClick={() => {
+              close();
+            }}
+          >
+            <RxCross1 />
           </div>
-          <div className={style.inputWrapper}>
-            <div onClick={() => setPasswordHidden(!isPasswordHidden)}>
-              {isPasswordHidden ? (
-                <RxEyeNone className={style.inputIcon} />
-              ) : (
-                <RxEyeOpen className={style.inputIcon} />
-              )}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <h2>Login</h2>
+            <div className={style.inputWrapper}>
+              <RxPerson className={style.inputIcon} />
+              <input
+                {...register('login', {
+                  required: 'This is required',
+                  minLength: { value: 3, message: 'Min length is 3' },
+                })}
+                autoComplete="off"
+              />
+              <label className={login ? style.activeLabel : style.label}>
+                Login
+              </label>
+              <p className={style.errors}>{errors.login?.message}</p>
             </div>
-            <input
-              {...register('password', {
-                required: 'This is required',
-                minLength: { value: 3, message: 'Min length is 3' },
-              })}
-              autoComplete="off"
-              type={isPasswordHidden ? 'password' : 'text'}
-            />
-            <label className={password ? style.activeLabel : style.label}>
-              Password
-            </label>
-            <p className={style.errors}>{errors.password?.message}</p>
-          </div>
+            <div className={style.inputWrapper}>
+              <div onClick={() => setPasswordHidden(!isPasswordHidden)}>
+                {isPasswordHidden ? (
+                  <RxEyeNone className={style.inputIcon} />
+                ) : (
+                  <RxEyeOpen className={style.inputIcon} />
+                )}
+              </div>
+              <input
+                {...register('password', {
+                  required: 'This is required',
+                  minLength: { value: 3, message: 'Min length is 3' },
+                })}
+                autoComplete="off"
+                type={isPasswordHidden ? 'password' : 'text'}
+              />
+              <label className={password ? style.activeLabel : style.label}>
+                Password
+              </label>
+              <p className={style.errors}>{errors.password?.message}</p>
+            </div>
 
-          <input className={style.submitButton} type="submit" value="ENTER" />
-          <div className={style.register}>
-            <p>
-              Do not have an account?{' '}
-              <span
-                onClick={() => {
-                  registerPage();
-                }}
-              >
-                Register
-              </span>
-            </p>
-          </div>
-        </form>
-      </div>
+            <input className={style.submitButton} type="submit" value="ENTER" />
+            <div className={style.register}>
+              <p>
+                Do not have an account?{' '}
+                <span
+                  onClick={() => {
+                    registerPage();
+                  }}
+                >
+                  Register
+                </span>
+              </p>
+            </div>
+          </form>
+        </motion.div>)}
+      </AnimatePresence>
     </div>
   );
 };
