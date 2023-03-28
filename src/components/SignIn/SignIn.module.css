@@ -96,6 +96,10 @@ input:focus ~ label {
   border: none;
 }
 
+.submitButton:active {
+  transform: scale(0.99);
+}
+
 .register {
   font-size: 0.9em;
   color: #fff;

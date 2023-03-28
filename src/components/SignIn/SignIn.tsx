@@ -76,7 +76,7 @@ export const SignIn = () => {
         {isVisible && (<motion.div
           className={style.formWrapper}
           initial={{ opacity: 0, x: 1000 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={{ opacity: 1, x: [1000, -50, 0] }}
           exit={{ opacity: 0, x: 1000 }}
           transition={{
             duration: 0.3,
