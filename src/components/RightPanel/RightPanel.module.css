@@ -1,4 +1,8 @@
 .RightPanel {
+  box-sizing: border-box;
   height: 100%;
-  background: #b3b3b3;
+  background: #ffffff;
+  border-top-left-radius: 8px;
+  box-shadow: -5px 0px 10px #707070;
+  padding: 20px;
 }
