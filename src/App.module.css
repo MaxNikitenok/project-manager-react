@@ -1,4 +1,4 @@
-.App {
+.app {
   display: grid;
   grid-template-columns: 270px 1fr 100px;
   grid-template-rows: 1fr 13fr;
@@ -6,7 +6,9 @@
     'leftPanel    header       header'
     'leftPanel centralPanel rightPanel';
   gap: 10px;
-  background: linear-gradient(50deg, #b3b7bb, 40%, #f2f5f6);
+  background: linear-gradient(50deg, #394149, 30%, #ffffff);
+  background-position: center;
+  background-size: cover;
   height: 100vh;
 }
 

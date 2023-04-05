@@ -30,7 +30,6 @@ const userSlice = createSlice({
       userApi.endpoints.signUp.matchFulfilled,
       (state, { payload }) => {
         state.isRegistrationSuccessfully = true;
-        alert(`Пользователь с именем ${payload.name} зарегистрирован.`)
       }
     );
     builder.addMatcher(

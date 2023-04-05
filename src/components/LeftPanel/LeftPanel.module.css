@@ -1,7 +1,8 @@
 .LeftPanel {
-  background: linear-gradient(50deg, #111415, #5d6060);
+  background: linear-gradient(50deg, #30363f, #5d6060);
   padding: 10px;
   height: calc(100% - 20px);
+  box-shadow: 4px 0px 8px #414141;
 }
 
 .LeftPanel li {

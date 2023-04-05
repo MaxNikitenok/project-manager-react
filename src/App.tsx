@@ -6,8 +6,9 @@ import LeftPanel from './components/LeftPanel/LeftPanel';
 import RightPanel from './components/RightPanel/RightPanel';
 
 const App = () => {
+  console.log(1)
   return (
-    <div className={style.App}>
+    <div className={style.app}>
       <div className={style.header}><Header /></div>
       <div className={style.leftPanel}><LeftPanel /></div>
       <div className={style.centralPanel}><CentralPanel /></div>
